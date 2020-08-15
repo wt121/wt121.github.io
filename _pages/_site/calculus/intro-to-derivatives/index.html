@@ -1,0 +1,117 @@
+<p><a href="/calculus/limits-and-continuity/index.html">Last time</a>, we asked the question of what happens when we want to find the slope of a secant lint between two points $(x, f(x))$ and $(x+h, f(x+h))$ for some parameter $h$. The slope $m$ of this secant line is</p>
+
+<script type="math/tex; mode=display">m=\frac{f(x+h)-f(x)}{h}</script>
+
+<p>Today, we’ll see what happens as we take the limit as $h\rightarrow 0$. That is, what happens when the two points begin to approach each other? To think about this problem, let’s go back to Problem 3 from <a href="/calculus/limits-and-continuity/index.html">last time</a>, where we considered the function $f(x)=x^2$. Let’s evaluate the slope $m$ from above for this function:</p>
+
+<script type="math/tex; mode=display">m=\frac{(x+h)^2-x^2}{h}=\frac{x^2+2xh+h^2-x^2}{h}=\frac{2xh+h^2}{h}=2x+h</script>
+
+<p>We’re interested in what happens in the limit as $h\rightarrow 0$. In this case, this limit is pretty easy to evaluate:</p>
+
+<script type="math/tex; mode=display">\lim_{h\rightarrow 0}m=\lim_{h\rightarrow 0}(2x+h)=2x+0=2x</script>
+
+<p>What is this statement telling us? As $h\rightarrow 0$, the secant line starts to become the <em>tangent line</em> that is tangent to the curve $f(x)$ at a particular value of $x$. We call this a tangent line because locally, it only intersects $f(x)$ at one point. The slope of this tangent line is called the <strong>derivative</strong>. Based on our calculations from above, the derivative, which we’ll denote as $m$ for now, is defined to be</p>
+
+<script type="math/tex; mode=display">m=\lim_{h\rightarrow 0}\frac{f(x+h)-f(x)}{h}</script>
+
+<p><img src="/assets/images/derivative-1.png" alt="derivative-x^2" width="70%" height="70%" /></p>
+
+<p>The above figure illustrates an example of a tangent line that is tangent to the curve $f(x)=x^2$ at the point $(2, 4)$. Based on our formula from above, the slope of this tangent line at this point is $m=2(2)=4$. Since we know that the point $(2, 4)$ lies on this tangent line, we could use the point-slope formula to then write down the explicit form of the tangent line. This is just an illustrative example of what a derivative is: <em>the derivative describes the slopes of tangent lines to a curve $f(x)$</em>.</p>
+
+<blockquote>
+  <h2 id="derivative-notation">Derivative Notation</h2>
+</blockquote>
+
+<p>In reality, derivatives aren’t denoted as $m$. There are two common ways to denote the derivative of a function $f(x)$: (1) prime notation and (2) Leibniz notation. Prime notation looks like this:</p>
+
+<script type="math/tex; mode=display">f'(x)=\lim_{h\rightarrow 0}\frac{f(x+h)-f(x)}{h}</script>
+
+<p>The presence of a $’$ symbol denotes that we’re taking the derivative of the function. Leibniz notation looks like this:</p>
+
+<script type="math/tex; mode=display">\frac{df}{dx}=\frac{d}{dx}[f(x)]=\lim_{h\rightarrow 0}\frac{f(x+h)-f(x)}{h}</script>
+
+<p>For reasons that we’ll talk about later, I <em>highly recommend</em> you use the Leibniz notation, but you should be familiar with and able to read/use both types of derivative notations.</p>
+
+<blockquote>
+  <h2 id="properties-of-the-derivative">Properties of the Derivative</h2>
+</blockquote>
+
+<p>Fundamentally, a derivative is defined as a limit. This means that many properties about limits can also apply to derivatives:</p>
+
+<ol>
+  <li>In order for a derivative to exist, it shouldn’t matter whether we approach the limit from the left or from the right. In other words, the limit must be defined from either direction. This makes sense, since we know that that $\lim_{x\rightarrow c}$ only exists when the limits $\lim_{x\rightarrow c^-}$ and $\lim_{x\rightarrow c^+}$ are equal. As an example, the derivative at $x=0$ of $f(x)=\vert x\vert$ does not exist. In general piece-wise discontinuous functions (like a step function) and functions with sharp edges (like an absolute value function).</li>
+  <li>A derivative can only exist then the function is defined there. For these reasons, rational functions like $1/x$ have an undefined derivative at $x=0$, and $\sin(1/x)$ also has an undefined derivative at $x=0$.</li>
+  <li>For the above reasons and a few more, we can arrive at a pretty substantial conclusion:</li>
+</ol>
+
+<blockquote>
+  <p>Differentiability implies continuity.</p>
+</blockquote>
+
+<p>This statement means that if a function is differentiable at some point $x=x_0$, then we are <em>guaranteed</em> that the function is also continuous at the same point $x=x_0$. This also means that if we know that the function is <em>not</em> continuous at a given point, it must also not be differentiable at that point too. However, note that the converse is not true: if the function is continuous at some point $x=x_0$, it does <strong>not</strong> necessarily mean that the function is is also differentiable at that same point.</p>
+
+<blockquote>
+  <h2 id="differentiability-implies-local-linearity">Differentiability Implies Local Linearity</h2>
+</blockquote>
+
+<p>Let’s go back to the first graph of this page where we plotted the function $y=x^2$ and the tangent line of this function at the point $(2, 4)$. Imagine that we zoomed in really close to this particular point $(2, 4)$. Although the tangent line and actual function aren’t necessarily equal, they do look very similar. This can often be used to our advantage to approximate function values that would otherwise be difficult to evaluate. Let’s say that we know the derivative of a function, and also a point that lies on the function:</p>
+
+<script type="math/tex; mode=display">df/dx\text{ and }f(a)=b\text{ are given and for some }a, b</script>
+
+<p>Using this information, we can derive a <em>linear approximation</em> for the function that’s pretty good close to the point $(a, b)$ on the graph.</p>
+
+<script type="math/tex; mode=display">y-a=\left.\frac{df}{dx}\right\vert_{x=a, y=b}(x-b)</script>
+
+<p>The slope in the point-slope notation here is the derivative $df/dx$ evaluated at the particular point $(a, b)$. This result is called the tangent line approximation and can be used to approximate values of $y$ near $x=a$.</p>
+
+<blockquote>
+  <h2 id="visualizing-derivatives">Visualizing Derivatives</h2>
+</blockquote>
+
+<p>A very common type of problem asks you to graph both $f(x)$ and $df/dx$ on the same graph given one versus the other. There are three rules involving the first derivative that you should know:</p>
+
+<ol>
+  <li>If $df/dx&gt;0$ at a particular point, then $f(x)$ is increasing at that point.</li>
+  <li>If $df/dx&lt;0$ at a particular point, then $f(x)$ is decreasing at that point.</li>
+  <li>If $df/dx=0$ at a particular point, then $f(x)$ has a <em>critical point</em> at that point.</li>
+</ol>
+
+<p>A rather unhelpful, but technically correct, definition of a <strong>critical point</strong> is a point where the first derivative is equal to zero. A more practical definition is a critical point is a local extremum (meaning minimum or maximum) or a saddle point. Here are three of the most common examples for critical points:</p>
+
+<p><img src="/assets/images/extrema.png" alt="extrema" width="70%" height="70%" /></p>
+
+<p>Let’s go over a simple example to illustrate this. Consider the following graph of the derivative of <script type="math/tex">f(x)</script>:</p>
+
+<p><img src="/assets/images/piecewise-derivative.png" alt="piecewise-derivative" width="50%" height="50%" /></p>
+
+<p>Our goal is to sketch what <script type="math/tex">f(x)</script> looks like given this graph of <script type="math/tex">f'(x)</script>. For $x&lt;x_1$, $f’(x)$ is just some constant positive number, meaning that $f(x)$ is increasing by the same amount all the time irregardless of the value of $x$ we’re at, so long as $x&lt;x_1$. This corresponds to an increasing linear function. For $x_1\leq x&lt;x_2$, $f’(x)$ is a constant negative number, and so by similar reasoning, this corresponds to a decreasing linear function. For $x\geq x_2$, $f’(x)=0$, and so the function $f(x)$ isn’t decreasing or increasing: it is just remaining at some constant value since its rate of change is zero. Therefore, superimposing the graphs of $f(x)$ and $f’(x)$ together, we might have something that looks like</p>
+
+<p><img src="/assets/images/piecewise-derivative-2.png" alt="piecewise-derivative" width="50%" height="50%" /></p>
+
+<p>We’ll be able to further improve our graph function sketches once we introduce the notion of the <a href="/calculus/higher-order-derivatives/index.html">second derivative</a>. Sketching either $f(x)$ or $f’(x)$ (or both) involves practice to get a strong intuition about how functions and their derivatives behave.</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<h3 id="problem-1">Problem 1</h3>
+
+<p>Earlier, we asserted that just because a function is continuous at a given point does not mean that it is also differentiable at that same point. Give two different examples of shapes of functions that are continuous at at least one point, but not differentiable at that point.</p>
+
+<h3 id="problem-2">Problem 2</h3>
+
+<p>Consider the function $f(x)$ that we graphed above in our discussion involving using the piecewise constant $f’(x)$ function to sketch $f(x)$. This function can also be the derivative of another function, which we can denote as $F(x)$. That is, $dF/dx=f(x)$. Using our sketch of $f(x)$ above, sketch out the general shape of $F(x)$.</p>
+
+<h3 id="problem-3">Problem 3</h3>
+
+<p>Consider a function $y=f(x)$ with a derivative given by</p>
+
+<script type="math/tex; mode=display">\frac{df}{dx}=x-y-2</script>
+
+<p>At $x=-1$, $y$ is known to be $3$.</p>
+
+<ol>
+  <li>Using this information, construct a tangent line approximation of the value of $y$ near $x=-1$.</li>
+  <li>It is known that the actual value of $y$ at $x=-0.9$ is $y(-0.9)\approx 2.434$. How good is your approximation at $x=-0.9$?</li>
+  <li>It is known that the actual value of $y$ at $x=0$ is $y(0)=-3+7e^{-1}\approx -0.425$. How good is your approximation at $x=0$?</li>
+</ol>

@@ -1,0 +1,420 @@
+<blockquote>
+  <h2 id="waking-up-in-the-morning">Waking Up in the Morning</h2>
+</blockquote>
+
+<p>Waking up in the morning is something that everyone is familiar with. However, there are a lot of things that go into waking up: drinking a glass of water, brushing your teeth, using the restroom, and taking a shower are some of the things that might make up your morning routine. Each of these individual tasks might have additional components to them as well. As an example, drinking a glass of water involves the actions of (1) getting a glass, (2) filling the glass with water, and (3) holding up the glass to your mouth in order to drink. However, if someone asks you how your morning was, you typically don’t go into all of the details of these different tasks. However, based on the “success” of how these different tasks were performed, you might respond with either “It was good.” or “It was horrible!”</p>
+
+<blockquote>
+  <h2 id="abstraction">Abstraction</h2>
+</blockquote>
+
+<p>This simple example of waking up illustrates probably one of the most important concepts in programming with Java and other <a href="https://en.wikipedia.org/wiki/Object-oriented_programming">object-oriented programming</a> languages. The idea is in trying to execute some complex task, such as waking up in the morning, we want to break it the task down into smaller pieces that are more manageable for us to approach. In terms of programming, these smaller pieces could be Java <code class="highlighter-rouge">classes</code> or functions.</p>
+
+<p>Abstraction is not just “some idea” to throw around. Good abstraction makes tackling programming problems easy that would otherwise be difficult or even impossible. It makes your code easier to read, and prevents you from repeating code over and over again.</p>
+
+<p>This description of abstraction is very conceptual, so let’s see an example of how to implement this in an actual program.</p>
+
+<blockquote>
+  <h2 id="bit">Bit++</h2>
+</blockquote>
+
+<p><em>This problem is adapted from <a href="http://codeforces.com/problemset/problem/282/A">Codeforces</a>.</em></p>
+
+<p>In the fictional world of Bitland, their most popular programming language is called <code class="highlighter-rouge">Bit++</code>.</p>
+
+<p><code class="highlighter-rouge">Bit++</code> is very peculiar and complicated. It has exactly one variable, called <code class="highlighter-rouge">x</code>. There are two operations that we can do with <code class="highlighter-rouge">x</code>:</p>
+
+<ol>
+  <li>Operation <code class="highlighter-rouge">++</code> increases the value of <code class="highlighter-rouge">x</code> by <code class="highlighter-rouge">1</code>.</li>
+  <li>Operation <code class="highlighter-rouge">--</code> decreases the value of <code class="highlighter-rouge">x</code> by <code class="highlighter-rouge">1</code>.</li>
+</ol>
+
+<p>A statement in language <code class="highlighter-rouge">Bit++</code> is a sequence, consisting of exactly one operation, one variable <code class="highlighter-rouge">x</code>, and one nonnegative number that represents how much to increase or decrease by. The statement is written without spaces, that is, it can only contain characters <code class="highlighter-rouge">+</code>, <code class="highlighter-rouge">-</code>, <code class="highlighter-rouge">x</code>, and our standard decimal digits. Executing a statement means applying the operation it contains.</p>
+
+<p>A program in <code class="highlighter-rouge">Bit++</code> is a sequence of statements separated by spaces, each of which needs to be executed. Executing a program means executing all the statements it contains.</p>
+
+<p>You’re given a program in language <code class="highlighter-rouge">Bit++</code>. The initial value of <code class="highlighter-rouge">x</code> is the integer in the first argument given. Execute the program and print out the final value of <code class="highlighter-rouge">x</code>. Here are some examples of what this program will look like:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ 2 x++3 --x1              // Input
+4                          // Output (2 + 3 - 1 = 4)
+$ 8 x++574 ++x4 --x1000    // Input
+-414                       // Output (8 + 574 + 4 - 1000 = -414)
+</code></pre></div></div>
+
+<blockquote>
+  <h2 id="abstraction-using-class-structures">Abstraction Using Class Structures</h2>
+</blockquote>
+
+<p>Woah, that was a lot of information to take in! In order to even begin to think about how to approach this problem, we need to break it down into smaller, more manageable problems.</p>
+
+<p>The first thing we need to figure out is how to convert a <code class="highlighter-rouge">String</code> sequence command in this <code class="highlighter-rouge">Bit++</code> language into things that we can actually utilize. Based on the information given in the problem, we know that there are essentially four different allowed types of commands:</p>
+
+<ol>
+  <li><code class="highlighter-rouge">++xn</code>, where <code class="highlighter-rouge">n</code> is some nonnegative integer.</li>
+  <li><code class="highlighter-rouge">x++n</code>, where <code class="highlighter-rouge">n</code> is some nonnegative integer.</li>
+  <li><code class="highlighter-rouge">--xn</code>, where <code class="highlighter-rouge">n</code> is some nonnegative integer.</li>
+  <li><code class="highlighter-rouge">x--n</code>, where <code class="highlighter-rouge">n</code> is some nonnegative integer.</li>
+</ol>
+
+<p>Commands 1 and 2 should be treated the same, and commands 3 and 4 should be treated the same. When thinking about a command, we care about two things: (1) are we incrementing or decrementing <code class="highlighter-rouge">x</code>, and (2) by how much? We can represent these types of commands using a Java <code class="highlighter-rouge">class</code> called <code class="highlighter-rouge">CodeLine</code>, which the appropriate fields to reflect these two things that we care about:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CodeLine</span> <span class="o">{</span>
+    <span class="cm">/*
+     * op represents whether we increment or decrement. +1 corresponds to
+     * the ++ operator, while -1 corresponds to the -- operator.
+     * Initialize the value of op as 0.
+     */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">op</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/* 
+     * val represents the amount to increment or decrement, and must be
+     * nonnegative. Initialize the value of val as 0.
+     */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/* Constructor. */</span>
+    <span class="kd">public</span> <span class="nf">CodeLine</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// TODO</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Using this <code class="highlighter-rouge">class</code> structure, we can take in a <code class="highlighter-rouge">String</code> command in <code class="highlighter-rouge">Bit++</code> language format and set the <code class="highlighter-rouge">op</code> and <code class="highlighter-rouge">val</code> fields appropriately.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CodeLine</span> <span class="o">{</span>
+    <span class="cm">/*
+     * op represents whether we increment or decrement. +1 corresponds to
+     * the ++ operator, while -1 corresponds to the -- operator.
+     * Initialize the value of op as 0.
+     */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">op</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/* 
+     * val represents the amount to increment or decrement, and must be
+     * nonnegative. Initialize the value of val as 0.
+     */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/*
+     * Constructor takes in a command sequence called arg in Bit++ language
+     * format and sets the op and val fields appropriately.
+     */</span>
+    <span class="kd">public</span> <span class="nf">CodeLine</span><span class="o">(</span><span class="nc">String</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// The operator that determines whether we increment or decrement</span>
+        <span class="c1">// is determined by the first three characters of the command,</span>
+        <span class="c1">// which is some combination of the characters '+', '-', and 'x'.</span>
+        <span class="nc">String</span> <span class="n">prefix</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
+
+        <span class="c1">// The number that we increment or decrement by is everything after</span>
+        <span class="c1">// the first three characters of the command. We will convert this</span>
+        <span class="c1">// String representation of the number into an integer, and set</span>
+        <span class="c1">// the field val equal to num.</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">arg</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">3</span><span class="o">));</span>
+    	
+        <span class="c1">// Handle case where the command is of the form "++xn" or "x++n".</span>
+        <span class="c1">// || stands for "or".</span>
+    	<span class="k">if</span> <span class="o">(</span><span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"++x"</span><span class="o">)</span> <span class="o">||</span> <span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"x++"</span><span class="o">))</span> <span class="o">{</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">op</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    	<span class="o">}</span>
+    	
+        <span class="c1">// Handle case where the command is of the form "--xn" or "x--n".</span>
+    	<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"--x"</span><span class="o">)</span> <span class="o">||</span> <span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"x--"</span><span class="o">))</span> <span class="o">{</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    	<span class="o">}</span>
+    	
+        <span class="c1">// In any other case, the command is not formatted correctly.</span>
+        <span class="c1">// We will just set the field op equal to 0 in this case. </span>
+        <span class="c1">// This means that in the future, if we see this.op == 0, this</span>
+        <span class="c1">// means that an error occurred.</span>
+    	<span class="k">else</span> <span class="o">{</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">op</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    	<span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>If you haven’t seen the <code class="highlighter-rouge">Integer.parseInt()</code> or <code class="highlighter-rouge">substring()</code> functions before, I recommend checking out <a href="https://www.javatpoint.com/java-integer-parseint-method">this link</a> and <a href="https://beginnersbook.com/2013/12/java-string-substring-method-example/">this link</a>, respectively. Finally, we may be interested in being able to read what the fields <code class="highlighter-rouge">op</code> and <code class="highlighter-rouge">val</code> are in the future, so let’s define the appropriate methods <code class="highlighter-rouge">getOp()</code> and <code class="highlighter-rouge">getVal()</code> for this:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CodeLine</span> <span class="o">{</span>
+    <span class="cm">/*
+     * op represents whether we increment or decrement. +1 corresponds to
+     * the ++ operator, while -1 corresponds to the -- operator.
+     * Initialize the value of op as 0.
+     */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">op</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/* 
+     * val represents the amount to increment or decrement, and must be
+     * nonnegative. Initialize the value of val as 0.
+     */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+    <span class="cm">/*
+     * Constructor takes in a command sequence called arg in Bit++ language
+     * format and sets the op and val fields appropriately.
+     */</span>
+    <span class="kd">public</span> <span class="nf">CodeLine</span><span class="o">(</span><span class="nc">String</span> <span class="n">arg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// The operator that determines whether we increment or decrement</span>
+        <span class="c1">// is determined by the first three characters of the command,</span>
+        <span class="c1">// which is some combination of the characters '+', '-', and 'x'.</span>
+        <span class="nc">String</span> <span class="n">prefix</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
+
+        <span class="c1">// The number that we increment or decrement by is everything after</span>
+        <span class="c1">// the first three characters of the command. We will convert this</span>
+        <span class="c1">// String representation of the number into an integer, and set</span>
+        <span class="c1">// the field val equal to num.</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">arg</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">3</span><span class="o">));</span>
+    	
+        <span class="c1">// Handle case where the command is of the form "++xn" or "x++n".</span>
+        <span class="c1">// || stands for "or".</span>
+    	<span class="k">if</span> <span class="o">(</span><span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"++x"</span><span class="o">)</span> <span class="o">||</span> <span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"x++"</span><span class="o">))</span> <span class="o">{</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">op</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    	<span class="o">}</span>
+    	
+        <span class="c1">// Handle case where the command is of the form "--xn" or "x--n".</span>
+    	<span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"--x"</span><span class="o">)</span> <span class="o">||</span> <span class="n">prefix</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"x--"</span><span class="o">))</span> <span class="o">{</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">op</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    	<span class="o">}</span>
+    	
+        <span class="c1">// In any other case, the command is not formatted correctly.</span>
+        <span class="c1">// We will just set the field op equal to 0 in this case. </span>
+        <span class="c1">// This means that in the future, if we see this.op == 0, this</span>
+        <span class="c1">// means that an error occurred.</span>
+    	<span class="k">else</span> <span class="o">{</span>
+    		<span class="k">this</span><span class="o">.</span><span class="na">op</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    	<span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* Returns the value of the field op. */</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getOp</span><span class="o">()</span> <span class="o">{</span>
+    	<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">op</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="cm">/* Returns the value of the field val. */</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getVal</span><span class="o">()</span> <span class="o">{</span>
+    	<span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>This wraps up our defined <code class="highlighter-rouge">class</code> called <code class="highlighter-rouge">CodeLine</code>. Using this Java <code class="highlighter-rouge">class</code> that we’ve defined, we can now process a single command sequence in our <code class="highlighter-rouge">Bit++</code> language. The next thing we want to do is finally be able to execute a sequence of commands to perform a series of computations to compute the desired result.</p>
+
+<blockquote>
+  <h2 id="abstraction-using-methods">Abstraction Using Methods</h2>
+</blockquote>
+
+<p>We’re now ready to define the main <code class="highlighter-rouge">class</code> for our program, which we’ll call <code class="highlighter-rouge">BitPlusPlus</code>. Again, we’ll use our fields to keep track of the things we care about, which are the final result, the raw <code class="highlighter-rouge">String</code> commands, and the command sequences that we converted into <code class="highlighter-rouge">class</code> instances of <code class="highlighter-rouge">CodeLine</code> that we defined above. To keep track of the command sequences, we’ll be using the arrays and lists that we talked about <a href="/java/lists-and-arrays/index.html">last time</a>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BitPlusPlus</span> <span class="o">{</span>
+    <span class="cm">/* 
+     * Keep track of the raw String arguments that were passed into 
+     * our program.
+     */</span>
+    <span class="kd">private</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">rawArgs</span><span class="o">;</span>
+
+    <span class="cm">/* Keep track of the result of our calculations. */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">result</span><span class="o">;</span>
+	
+    <span class="cm">/* 
+     * Keep track of the command sequences that we generated from the
+     * raw String arguments.
+     */</span>
+    <span class="kd">private</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">CodeLine</span><span class="o">&gt;</span> <span class="n">code</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>We can initialize all of these fields using a constructor by using an array of <code class="highlighter-rouge">String</code> input arguments that we assume are in the form described in the original problem.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BitPlusPlus</span> <span class="o">{</span>
+    <span class="cm">/* 
+     * Keep track of the raw String arguments that were passed into 
+     * our program.
+     */</span>
+    <span class="kd">private</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">rawArgs</span><span class="o">;</span>
+
+    <span class="cm">/* Keep track of the result of our calculations. */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">result</span><span class="o">;</span>
+	
+    <span class="cm">/* 
+     * Keep track of the command sequences that we generated from the
+     * raw String arguments.
+     */</span>
+    <span class="kd">private</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">CodeLine</span><span class="o">&gt;</span> <span class="n">code</span><span class="o">;</span>
+
+    <span class="cm">/* Constructor that initializes all of our different fields. */</span>
+    <span class="kd">public</span> <span class="nf">BitPlusPlus</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// rawArgs field will be a String array of all of our</span>
+        <span class="c1">// different command sequences. Because we only want</span>
+        <span class="c1">// commands, we will not include the first element of args,</span>
+        <span class="c1">// which is simply the starting value of x.</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">rawArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">rawArgs</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> 
+        <span class="o">}</span>
+
+        <span class="c1">// Initialize the value of the result field to be first</span>
+        <span class="c1">// element of args.</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+
+        <span class="c1">// Create a new ArrayList of CodeLines.	</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">code</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">CodeLine</span><span class="o">&gt;(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>When we startup our program, there are three things that we want to do:</p>
+
+<ol>
+  <li>Create a new program <code class="highlighter-rouge">class</code> instance of <code class="highlighter-rouge">BitPlusPlus</code>.</li>
+  <li>Parse through the given <code class="highlighter-rouge">String</code> input commands and convert them to <code class="highlighter-rouge">CodeLine</code>s. To accomplish this, we can define a <code class="highlighter-rouge">parse()</code> method.</li>
+  <li>Compute the desired result. To accomplish this, we can define a <code class="highlighter-rouge">compute()</code> method.</li>
+</ol>
+
+<p>Assuming we’ve defined all of these relevant functions, then our <code class="highlighter-rouge">main()</code> program can take care of the rest. The code snippet might look something like</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">...</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Create the new instance of the Bit++ program.</span>
+        <span class="nc">BitPlusPlus</span> <span class="n">program</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BitPlusPlus</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
+
+        <span class="c1">// If we're able to successfully parse through the input </span>
+        <span class="c1">// argument string...</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">program</span><span class="o">.</span><span class="na">parse</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// ...then compute and print out the result.</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">program</span><span class="o">.</span><span class="na">compute</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="c1">// Otherwise, let the user know that there's an error.</span>
+        <span class="k">else</span> <span class="o">{</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"SYNTAX ERROR"</span><span class="o">);</span> <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<p>Now, all that remains is to define the <code class="highlighter-rouge">parse()</code> and <code class="highlighter-rouge">compute()</code> functions. Altogether, the <code class="highlighter-rouge">class</code> would look something like this:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BitPlusPlus</span> <span class="o">{</span>
+    <span class="cm">/* 
+     * Keep track of the raw String arguments that were passed into 
+     * our program.
+     */</span>
+    <span class="kd">private</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">rawArgs</span><span class="o">;</span>
+
+    <span class="cm">/* Keep track of the result of our calculations. */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">result</span><span class="o">;</span>
+	
+    <span class="cm">/* 
+     * Keep track of the command sequences that we generated from the
+     * raw String arguments.
+     */</span>
+    <span class="kd">private</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">CodeLine</span><span class="o">&gt;</span> <span class="n">code</span><span class="o">;</span>
+
+    <span class="cm">/* Constructor that initializes all of our different fields. */</span>
+    <span class="kd">public</span> <span class="nf">BitPlusPlus</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// rawArgs field will be a String array of all of our</span>
+        <span class="c1">// different command sequences. Because we only want</span>
+        <span class="c1">// commands, we will not include the first element of args,</span>
+        <span class="c1">// which is simply the starting value of x.</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">rawArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">rawArgs</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> 
+        <span class="o">}</span>
+
+        <span class="c1">// Initialize the value of the result field to be first</span>
+        <span class="c1">// element of args.</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+
+        <span class="c1">// Create a new ArrayList of CodeLines.	</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">code</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">CodeLine</span><span class="o">&gt;(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* 
+     * Parses though the String input commands in the field rawArgs and 
+     * converts them to Codeline class instances. This method returns 0
+     * if parsing was successful, and returns -1 if parsing was
+     * unsuccessful.
+     */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">parse</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// If there's nothing to parse, then return -1.</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">rawArgs</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="o">}</span>
+		
+        <span class="c1">// For each String command in rawArgs, convert it to a CodeLine</span>
+        <span class="c1">// class instance and add it to the ArrayList field this.code.</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="na">rawArgs</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">CodeLine</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">rawArgs</span><span class="o">[</span><span class="n">i</span><span class="o">]));</span>
+
+            <span class="c1">// If the format was wrong, then indicate that the</span>
+            <span class="c1">// parsing failed.	</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getOp</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span> <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// If we got to this point, then we can return 0 to indicate that</span>
+        <span class="c1">// this function completed successfully.</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* Computes and returns the desired result. */</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">compute</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Iterate over all of the code sequences</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="c1">// Update the result based on the command sequence.</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">result</span> <span class="o">+=</span> <span class="k">this</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getOp</span><span class="o">()</span> <span class="o">*</span> 
+                    <span class="k">this</span><span class="o">.</span><span class="na">code</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getVal</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">result</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Create the new instance of the Bit++ program.</span>
+        <span class="nc">BitPlusPlus</span> <span class="n">program</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BitPlusPlus</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
+
+        <span class="c1">// If we're able to successfully parse through the input </span>
+        <span class="c1">// argument string...</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">program</span><span class="o">.</span><span class="na">parse</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// ...then compute and print out the result.</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">program</span><span class="o">.</span><span class="na">compute</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="c1">// Otherwise, let the user know that there's an error.</span>
+        <span class="k">else</span> <span class="o">{</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"SYNTAX ERROR"</span><span class="o">);</span> <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Altogether, assuming that our <code class="highlighter-rouge">BitPlusPlus.java</code> and <code class="highlighter-rouge">CodeLine.java</code> source code files are in the same <code class="highlighter-rouge">src</code> Java Project directory, we should have a working <code class="highlighter-rouge">Bit++</code> program! Let’s try it out using the examples from above:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ javac *.java                              // Compiles all .java src files
+$ java BitPlusPlus 2 x++3 --x1              // Input
+4                                           // Output (2+3-1=4)
+$ java BitPlusPlus 8 x++574 ++x4 --x1000    // Input
+-414                                        // Output (8+574+4-1000=-414)
+</code></pre></div></div>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<h3 id="problem-1">Problem 1</h3>
+
+<p><em>This problem is adapted from <a href="http://codeforces.com/problemset/problem/59/A">Codeforces</a>.</em></p>
+
+<p>Chad is very upset that some people mix uppercase and lowercase letters in one word. That’s why he decided to invent an extension for his favorite browser that would change the letters’ register in every word so that it either only consisted of lowercase letters or, vice versa, only of uppercase ones. <strong>He wants as little as possible letters to be changed in the original word.</strong> For example, the word “HoUse” must be replaced with “house”, and the word “ViP” with “VIP”. If a word contains an equal number of uppercase and lowercase letters, you should replace all the letters with lowercase ones. For example, “maTRIx” should be replaced by “matrix”. Your task is to use the given method on one given word.</p>
+
+<p><em>Hint: In writing this program, you may find yourself trying to list out all of the possible characters from</em> <code class="highlighter-rouge">'a'</code> to <code class="highlighter-rouge">'z'</code><em>. Do not do this! There is a sleeker way of writing this code, and it involves using the fact that <code class="highlighter-rouge">char</code>s can be converted to <code class="highlighter-rouge">int</code>s and back using an <a href="https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html">ASCII conversion table</a>.</em></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Problem1</span> <span class="o">{</span>
+    <span class="c1">// TODO: Define any relevant fields and methods here as needed.</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Problem1</span> <span class="n">problem</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Problem1</span><span class="o">(</span><span class="s">"THIS IS A STRING"</span><span class="o">);</span>
+        
+        <span class="c1">// TODO: Add any relevant code here as needed. Feel free</span>
+        <span class="c1">// to change THIS IS A STRING above to whatever string</span>
+        <span class="c1">// you want!</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>

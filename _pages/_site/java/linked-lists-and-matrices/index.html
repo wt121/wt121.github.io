@@ -1,0 +1,306 @@
+<blockquote>
+  <h2 id="linkedlists"><code class="highlighter-rouge">LinkedList</code>s</h2>
+</blockquote>
+
+<p><a href="/java/lists-and-arrays/index.html">Last time</a>, we talked about the structure of a list, which we defined to be an ordered array of elements. Arrays had the limitation of having an immutable size and capacity. If we had an array that could hold a maximum of 10 elements and want to add an 11th element, we would have to create an entirely new array with a larger capacity. <code class="highlighter-rouge">ArrayList</code>s were able to overcome this limitation by featuring a mutable size and a capacity that could be expanded “under the hood.”</p>
+
+<p>Remember that both arrays and <code class="highlighter-rouge">ArrayList</code>s featured <em>contiguous</em> elements. This means that the <code class="highlighter-rouge">(i)</code>th and <code class="highlighter-rouge">(i+1)</code>th elements are right next to each other in the computer’s memory. For example, let’s say we had an <code class="highlighter-rouge">ArrayList</code> that looked something like</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(-</span><span class="mi">2</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">7</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>If we were to represent <code class="highlighter-rouge">data</code> conceptually, it might look something like this:</p>
+
+<p><img src="/assets/images/array-list.png" alt="array-list" height="50%" width="50%" /></p>
+
+<p>Imagine if we wanted to remove the element <code class="highlighter-rouge">data.get(2)</code>, which is equal to <code class="highlighter-rouge">7</code> according to our code. Because elements in arrays and <code class="highlighter-rouge">ArrayList</code>s must be contiguous in the computer’s memory, once we call <code class="highlighter-rouge">data.remove(2)</code> to remove the second element not only do we have to remove the element <code class="highlighter-rouge">7</code>, but we also have to move the element <code class="highlighter-rouge">0</code> (the third element) one position to the left, and then the element <code class="highlighter-rouge">4</code> (currently the fourth element) also one position to the left. This essentially involves copying and moving two elements around. For this simple example, this isn’t too big of an issue. However, what if our data set was much larger? What if <code class="highlighter-rouge">data</code> contained 10 million elements, and we wanted to remove the <code class="highlighter-rouge">0</code>th element? Or if we wanted to add an element at the very beginning of the <code class="highlighter-rouge">ArrayList</code>? All of a sudden, these processes will start to become very slow because they involve copying and moving so many different elements.</p>
+
+<p>Fortunately for us, <code class="highlighter-rouge">LinkedList</code>s provide a better, more time-efficient alternative. <code class="highlighter-rouge">LinkedList</code>s are another implementation of the list structure that we talked about previously. The allow for us to store data elements of the same type in an ordered fashion, and from the outside, will look and act exactly like any other type of list. However, <code class="highlighter-rouge">LinkedList</code>s have the one caveat where <strong>list elements don’t have to be contiguous</strong>. Rather, list elements are now called <code class="highlighter-rouge">nodes</code> that store a <em>pointer</em> to the next element in the list in addition to the data entry. For now, we can think of a pointer as an arrow that points to the next element. To create a <code class="highlighter-rouge">LinkedList</code>, our Java code might look something like this:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.LinkedList</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">LinkedList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(-</span><span class="mi">2</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">7</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">4</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>If we were to represent this version of <code class="highlighter-rouge">data</code> conceptually, it might look something like this:</p>
+
+<p><img src="/assets/images/linked-list.png" alt="linked-list" height="50%" width="50%" /></p>
+
+<p>Here, everything looks the same, but we now also have the pointers (denoted as arrows in the diagram) that point to the next element in the list. Imagine if we wanted to remove the element <code class="highlighter-rouge">data.get(2)</code>, which is equal to <code class="highlighter-rouge">7</code> according to our code. Calling <code class="highlighter-rouge">data.remove(2)</code> to remove the second element only requires two operations: removing the pointer from the <code class="highlighter-rouge">7</code> to the <code class="highlighter-rouge">0</code>, and “rerouting” the pointer from the <code class="highlighter-rouge">2</code> to the <code class="highlighter-rouge">0</code>. Therefore, after calling <code class="highlighter-rouge">data.remove(2)</code>, our <code class="highlighter-rouge">LinkedList</code> might look something like this:</p>
+
+<p><img src="/assets/images/linked-list-2.png" alt="linked-list-2" height="50%" width="50%" /></p>
+
+<p>The benefit of a <code class="highlighter-rouge">LinkedList</code> is that all of the data elements stay in place! This means that we don’t have to move anything around. All we need to do is update which direction the pointer is pointing. As another example, say we want to add the element <code class="highlighter-rouge">10</code> to the beginning of this list. After calling <code class="highlighter-rouge">data.add(0, 10)</code>, <code class="highlighter-rouge">data</code> would look like</p>
+
+<p><img src="/assets/images/linked-list-3.png" alt="linked-list-3" height="50%" width="50%" /></p>
+
+<p>Again, nothing had to move! However, note that one limitation that arises with <code class="highlighter-rouge">LinkedList</code>s is that if we’re trying to look for elements or access elements of the list, we always have to look through all of the elements before our desired element of interest in order to get the pointers to know how to traverse the list correctly. This is because the list <code class="highlighter-rouge">nodes</code> are not necessarily contiguous anymore. As a result, if your element is at the end of the list, you’ll have to traverse through all of the elements in the list before you can access it.</p>
+
+<p>As we’ve seen, <code class="highlighter-rouge">LinkedList</code>s are another great way to represent lists in Java. In general, if you know that your program will be adding and removing and moving elements around a lot, it might be more advantageous to use <code class="highlighter-rouge">LinkedList</code>s. If you know that you’ll be reading and writing elements a lot, it might be more advantageous to use <code class="highlighter-rouge">ArrayList</code>s. If you don’t quite know what you’ll need to be doing with your list, it might be worthwhile to try out both and see which one is faster!</p>
+
+<blockquote>
+  <h2 id="matrices">Matrices</h2>
+</blockquote>
+
+<p>In Java, there isn’t really a pre-defined matrix class. Instead, we can represent matrices as arrays within arrays. For example, consider the following matrix:</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+m=\begin{bmatrix} 6 & -2 \\ 7 & 0 \end{bmatrix} %]]></script>
+
+<p>In Java, we can represent this matrix using the following code:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="cm">/* Create a matrix m with two rows. */</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">m</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">2</span><span class="o">][];</span>
+
+        <span class="cm">/* Create two rows, each with two columns. */</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">firstRow</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">secondRow</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+
+        <span class="cm">/* Set all of the matrix elements. */</span>
+        <span class="n">firstRow</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">6</span><span class="o">;</span>
+        <span class="n">firstRow</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">;</span>
+        <span class="n">secondRow</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">7</span><span class="o">;</span>
+        <span class="n">secondRow</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="cm">/* Set the matrix rows of matrix m. */</span>
+        <span class="n">m</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">firstRow</span><span class="o">;</span>
+        <span class="n">m</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">secondRow</span><span class="o">;</span>
+        
+        <span class="cm">/* Print out the matrix. */</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">length</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+        		<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">m</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+        	<span class="o">}</span>
+        	<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>This code will print out the following:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ javac Example.java
+$ java Example
+6 -2
+7 0
+</code></pre></div></div>
+
+<p>There are a couple things to notice:</p>
+
+<ol>
+  <li>The matrix variable type is declared as <code class="highlighter-rouge">VariableType[][]</code>, where <code class="highlighter-rouge">VariableType</code> is the variable type of the elements of the matrix.</li>
+  <li>The element in the <code class="highlighter-rouge">i</code>th row and <code class="highlighter-rouge">j</code> column is accessed as <code class="highlighter-rouge">m[i][j]</code>.</li>
+  <li>The matrix is stored as a list of lists. In our case, the list might look something like <code class="highlighter-rouge">{ {6, -2}, {7, 0} }</code>.</li>
+</ol>
+
+<p>Other than that, matrices act exactly like lists! While you can represent matrices with <code class="highlighter-rouge">ArrayList</code>s or <code class="highlighter-rouge">LinkedList</code>s, it’s usually not recommended because it makes the structure of the matrix unnecessarily complex.</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<blockquote>
+  <h3 id="problem-1">Problem 1</h3>
+</blockquote>
+
+<p>Write a Java program that can multiply to square <script type="math/tex">n\times n</script> matrices together, where <script type="math/tex">n</script> is some positive integer. Test your program by evaluating the following two matrix multiplication problems:</p>
+
+<ol>
+  <li>
+    <script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix} 0 & 4\\ 5 & 2 \end{bmatrix}\begin{bmatrix}2 & 5 \\ 3 & 0\end{bmatrix} %]]></script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix} 0 & 5 & 6 & 1 \\ 3 & 5 & -7 & 2 \\ 4 & 10 & -6 & -1 \\ 1 & 1 & 3 & 1\end{bmatrix}\begin{bmatrix} 0 & 3 & 4 & 1 \\ 5 & 5 & 10 & 1 \\ 6 & -7 & -6 & 3 \\ 1 & 2 & -1 & 1\end{bmatrix} %]]></script>
+  </li>
+</ol>
+
+<p>The answers you should get are:</p>
+
+<ol>
+  <li>
+    <script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix}12 & 0 \\ 16 & 25\end{bmatrix} %]]></script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">% <![CDATA[
+\begin{bmatrix}64 & -15 & 13 & 24 \\ -15 & 87 & 102 & -11 \\ 13 & 102 & 153 & -5\\ 24 & -11 & -5 & 12\end{bmatrix} %]]></script>
+  </li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-2">Problem 2</h3>
+</blockquote>
+
+<p><em>This problem is adapted from <a href="http://codeforces.com/problemset/problem/894/A">Codeforces</a>.</em></p>
+
+<p>“QAQ” is a word to denote an expression of crying. Imagine “Q” as eyes with tears and “A” as a mouth.</p>
+
+<p>Now Adam has given Becky a string consisting of only uppercase English letters of length n. There is a great number of “QAQ” in the string. Becky wants to know how many subsequences “QAQ” are in the string Adam has given. Note that the letters “QAQ” don’t have to be consecutive, but the order of letters should be exact.</p>
+
+<p><strong>Input:</strong>  The only line contains a string of length $n$ ($3\leq n \leq 20$). It is guaranteed that the string contains uppercase English letters.</p>
+
+<p><strong>Output:</strong> Print an integer representing the number of subsequences “QAQ” in the string.</p>
+
+<p><strong>Examples:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ java Problem2 QAQAQYSYIOIWIN
+4
+$ java Problem2 QAQQQZZYNOIWIN
+3
+</code></pre></div></div>
+
+<p><strong>Explanations:</strong></p>
+
+<p>In the first example, there are four subsequences “QAQ”:</p>
+
+<ol>
+  <li><strong>QAQ</strong>AQYSYIOIWIN</li>
+  <li><strong>QA</strong>QA<strong>Q</strong>YSYIOIWIN</li>
+  <li><strong>Q</strong>AQ<strong>AQ</strong>YSYIOIWIN</li>
+  <li>QA<strong>QAQ</strong>YSYIOIWIN</li>
+</ol>
+
+<p>In the second example, there are three subsequences “QAQ”:</p>
+
+<ol>
+  <li><strong>QAQ</strong>QQZZYNOIWIN</li>
+  <li><strong>QA</strong>Q<strong>Q</strong>QZZYNOIWIN</li>
+  <li><strong>QA</strong>QQ<strong>Q</strong>ZZYNOIWIN</li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-3">Problem 3</h3>
+</blockquote>
+
+<p>In this problem, we will investigate the differences <code class="highlighter-rouge">ArrayList</code>s and <code class="highlighter-rouge">LinkedList</code>s we talked about earlier. More specifically, <code class="highlighter-rouge">LinkedList</code>s are much faster at inserting and removing different list elements, while <code class="highlighter-rouge">ArrayList</code>s are much faster at accessing and writing to different list elements. First, create a new Java <code class="highlighter-rouge">class</code> called <code class="highlighter-rouge">Compare.java</code>, and copy-paste the following code.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.Calendar</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Compare</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">a</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">LinkedList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">l</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Compare</span><span class="o">(</span><span class="kt">int</span> <span class="n">numElements</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">numElements</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numElements</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">a</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">l</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">popArrayElement</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="na">a</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+	
+        <span class="kt">long</span> <span class="n">stop</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="k">return</span> <span class="o">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">popLinkedElement</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="na">l</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+
+        <span class="kt">long</span> <span class="n">stop</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="k">return</span> <span class="o">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">accessArrayElement</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="kt">int</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">a</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">a</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">/</span> <span class="mi">2</span><span class="o">);</span>
+
+        <span class="kt">long</span> <span class="n">stop</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="k">return</span> <span class="o">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">long</span> <span class="nf">accessLinkedElement</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="kt">int</span> <span class="n">dummy</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">l</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">l</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">/</span> <span class="mi">2</span><span class="o">);</span>
+
+        <span class="kt">long</span> <span class="n">stop</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+
+        <span class="k">return</span> <span class="o">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">comparePop</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">array</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">popArrayElement</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">linked</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">popLinkedElement</span><span class="o">();</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"It takes ArrayList "</span> <span class="o">+</span> <span class="n">array</span> <span class="o">+</span> <span class="s">" nsec to "</span> <span class="o">+</span> 
+                            <span class="s">"remove the first element in the list."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"It takes LinkedList "</span> <span class="o">+</span> <span class="n">linked</span> <span class="o">+</span> <span class="s">" nsec to "</span> <span class="o">+</span> 
+                            <span class="s">"remove the first element in the list."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"It takes ArrayList "</span> <span class="o">+</span> <span class="o">(</span><span class="n">array</span> <span class="o">/</span> <span class="n">linked</span><span class="o">)</span> <span class="o">+</span>
+                            <span class="s">" times longer to remove the first element "</span> <span class="o">+</span> 
+                            <span class="s">"in the list."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">compareAccess</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">array</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">accessArrayElement</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">linked</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">accessLinkedElement</span><span class="o">();</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"It takes ArrayList "</span> <span class="o">+</span> <span class="n">array</span> <span class="o">+</span> <span class="s">" nsec to "</span> <span class="o">+</span> 
+                            <span class="s">"access an element in the middle of the list."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"It takes LinkedList "</span> <span class="o">+</span> <span class="n">linked</span> <span class="o">+</span> <span class="s">" nsec to "</span> <span class="o">+</span> 
+                            <span class="s">"access an element in the middle of the list."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"It takes LinkedList "</span> <span class="o">+</span> <span class="o">(</span><span class="n">linked</span> <span class="o">/</span> <span class="n">array</span><span class="o">)</span> <span class="o">+</span>
+                            <span class="s">" times longer to access an element in the "</span> <span class="o">+</span> 
+                            <span class="s">"middle of the list."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>	
+        <span class="nc">Compare</span> <span class="n">program</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Compare</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
+        
+        <span class="n">program</span><span class="o">.</span><span class="na">comparePop</span><span class="o">();</span>
+        <span class="n">program</span><span class="o">.</span><span class="na">compareAccess</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>You do not need to modify the code in any way. After you have done this, answer the following questions.</p>
+
+<ol>
+  <li>Read the code and make sure you understand what the code is trying to accomplish. To learn more about the <code class="highlighter-rouge">System.nanoTime()</code> method, check out <a href="https://stackoverflow.com/questions/3382954/measure-execution-time-for-a-java-method">this link</a>. (Comment the code if it’s helpful!)</li>
+  <li>Run this program with 100 passed in as the argument. What do you notice?</li>
+  <li>Run this program with 1000000 (one million) passed in as the argument. What do you notice?</li>
+  <li>Run this program with 10000000 (ten million) passed in as the argument. What do you notice?</li>
+  <li>Does your experiment results agree with your understanding of how <code class="highlighter-rouge">ArrayList</code>s and <code class="highlighter-rouge">LinkedList</code>s work?</li>
+</ol>
+
+<p>Make sure to repeat steps 2-4 a few times to make sure you get reproducible results.  Your outputs will very likely not be the same between runs, but they should be within the same order of magnitude.</p>

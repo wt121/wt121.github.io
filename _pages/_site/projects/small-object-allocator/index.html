@@ -1,0 +1,363 @@
+<p>Everyone that has taken an introductory computer systems course is familiar with the dreaded <code class="highlighter-rouge">malloc()</code> project: coding a memory allocation function almost entirely from scratch. This is a rapid introduction to the complicated world of pointer arithmetic and low-level programming, and of course, everyone’s favorite <code class="highlighter-rouge">segfault</code>’s.</p>
+
+<p>To extend upon the <code class="highlighter-rouge">malloc()</code> implementation that was taught as a part of my computer systems course, I designed and implemented <code class="highlighter-rouge">soalloc()</code>, a <code class="highlighter-rouge">malloc()</code> implementation optimized for allocating small chunks of memory that are all the same size. This allocator can therefore exclude the necessity of a header or a footer in many <code class="highlighter-rouge">malloc()</code> implementations, thus reducing the required memory. Furthermore, a program using <code class="highlighter-rouge">soalloc()</code> can dramatically vary the number of objects it has allocated over time, and the allocator will seamlessly scale up and down its internal memory usage accordingly. <code class="highlighter-rouge">soalloc()</code> allocators can greatly improve the performance of programs like <a href="https://google.github.io/liquidfun/">particle simulators</a>.</p>
+
+<p>Take a look at my implementation below!</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include "smallobj.h"
+#include &lt;assert.h&gt;
+#include &lt;stdbool.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+</span>
+
+<span class="cm">/*
+ * When defined, this symbol causes freed objects to be 
+ * overwritten so that it's easier to detect access-
+ * after-free bugs.
+ */</span>
+<span class="cp">#ifdef OVERWRITE_MEM
+</span>
+
+<span class="c1">// Forward-declare the chunk_t struct type.</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">chunk_t</span> <span class="n">chunk_t</span><span class="p">;</span>
+
+<span class="cm">/*!
+ * This struct is used by the small-object allocator to 
+ * represent a pool of objects that are all some small 
+ * fixed size.  The pool scales up and down based on 
+ * the number of objects that are in use; this is done 
+ * by allocating multiple "chunks" (chunks are allocated 
+ * using malloc()), each which can hold some number of 
+ * objects of the specified size.  Chunks are maintained 
+ * in a singly linked list.  When a chunk is no longer 
+ * in use, it is removed from the list of chunks, and 
+ * the chunk's memory is released from the pool using
+ * free().
+ */</span>
+<span class="k">struct</span> <span class="n">smallobj_pool_t</span> <span class="p">{</span>
+    <span class="c1">// The size of objects in this small-object pool.</span>
+    <span class="kt">int</span> <span class="n">objsize</span><span class="p">;</span>
+
+    <span class="c1">// The total number of objects allocated per chunk.</span>
+    <span class="kt">int</span> <span class="n">objects_per_chunk</span><span class="p">;</span>
+
+    <span class="c1">// The list of chunks in the small-object pool.</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk_list</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cm">/*!
+ * This struct represents one chunk of objects in a 
+ * small-object pool.  The pool's "objects_per_chunk" 
+ * value specifies how many objects fit in each
+ * chunk.  The last member "mem" is an array of size
+ * pool-&gt;objsize * pool-&gt;objects_per_chunk bytes.
+ */</span>
+<span class="k">struct</span> <span class="n">chunk_t</span> <span class="p">{</span>
+    <span class="c1">// The pool that the chunk is from.</span>
+    <span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">;</span>
+
+    <span class="c1">// Index of the next available object in the chunk.</span>
+    <span class="kt">int</span> <span class="n">next_available</span><span class="p">;</span>
+
+    <span class="c1">// How many small objects in this chunk have been </span>
+    <span class="c1">// released.</span>
+    <span class="kt">int</span> <span class="n">num_freed</span><span class="p">;</span>
+
+    <span class="c1">// A pointer to the next chunk in the pool, or NULL if </span>
+    <span class="c1">// this is the last chunk in the pool.</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">next_chunk</span><span class="p">;</span>
+
+    <span class="c1">// The start of the memory area for this chunk.</span>
+    <span class="kt">char</span> <span class="n">mem</span><span class="p">[];</span>
+<span class="p">};</span>
+
+
+<span class="c1">// === GENERAL POOL MANAGEMENT FUNCTIONS ==============</span>
+
+<span class="n">chunk_t</span> <span class="o">*</span><span class="nf">init_new_chunk</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">);</span>
+
+<span class="cm">/*!
+ * Given a pool, returns how much memory each chunk in the 
+ * pool provides for allocations.  In other words, this is 
+ * the size of the "mem" member at the end of chunks in a 
+ * given pool.
+ */</span>
+<span class="kt">size_t</span> <span class="nf">chunk_mem_size</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">objects_per_chunk</span> <span class="o">*</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">objsize</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*!
+ * Initialize a small-object pool of objects of the 
+ * specified size.  The initial pool will have no chunks 
+ * allocated in it.
+ *
+ * If malloc() cannot allocate the small-object pool 
+ * (unlikely) then this function will report an error and
+ * then abort().
+ */</span>
+<span class="n">smallobj_pool_t</span> <span class="o">*</span> <span class="nf">make_so_pool</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">objsize</span><span class="p">,</span> 
+                                <span class="kt">int</span> <span class="n">objects_per_chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">objsize</span> <span class="o">&gt;=</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">intptr_t</span><span class="p">));</span>
+
+    <span class="c1">// Allocate an empty pool.</span>
+    <span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">smallobj_pool_t</span><span class="p">));</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pool</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"ERROR:  Couldn't allocate small-</span><span class="err">
+</span><span class="s">                            object pool"</span><span class="p">);</span>
+        <span class="n">abort</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">pool</span><span class="o">-&gt;</span><span class="n">objsize</span> <span class="o">=</span> <span class="n">objsize</span><span class="p">;</span>
+    <span class="n">pool</span><span class="o">-&gt;</span><span class="n">objects_per_chunk</span> <span class="o">=</span> <span class="n">objects_per_chunk</span><span class="p">;</span>
+
+    <span class="n">pool</span><span class="o">-&gt;</span><span class="n">chunk_list</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">pool</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*!
+ * Release a small-object pool.  Any pointers to objects in 
+ * this pool are no longer valid after release.
+ */</span>
+<span class="kt">void</span> <span class="nf">release_so_pool</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">pool</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="c1">// Iterate through all chunks and free() each one.</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">chunk_list</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">chunk</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">chunk_t</span> <span class="o">*</span><span class="n">next</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_chunk</span><span class="p">;</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">chunk</span><span class="p">);</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Free the pool itself.</span>
+    <span class="n">free</span><span class="p">(</span><span class="n">pool</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/*!
+ * Reports the total size of the small-object pool in bytes, 
+ * including the size of the pool structure, and the sizes 
+ * of all chunks allocated for the pool. This value will 
+ * never be zero, since the pool data structure always 
+ * occupies some number of bytes.
+ */</span>
+<span class="kt">size_t</span> <span class="nf">total_pool_size</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">pool</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">smallobj_pool_t</span><span class="p">);</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">chunk_list</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">chunk</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">size</span> <span class="o">+=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">chunk_t</span><span class="p">)</span> <span class="o">+</span> <span class="n">chunk_mem_size</span><span class="p">(</span><span class="n">pool</span><span class="p">);</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_chunk</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">size</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="c1">// === ALLOCATION FUNCTIONS =============================</span>
+
+<span class="cm">/*!
+ * This helper function initializes a new chunk for use in a 
+ * small-object pool. The function calls malloc() to allocate 
+ * the chunk's memory, and then it performs any necessary 
+ * initialization on the chunk's contents to prepare for
+ * small-object allocations.
+ */</span>
+<span class="n">chunk_t</span> <span class="o">*</span><span class="nf">init_new_chunk</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">chunk_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">chunk_t</span><span class="p">)</span> <span class="o">+</span> 
+                             <span class="n">chunk_mem_size</span><span class="p">(</span><span class="n">pool</span><span class="p">);</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="n">chunk_size</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">chunk</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"ERROR:  Couldn't allocate chunk for </span><span class="err">
+</span><span class="s">                    pool %p"</span><span class="p">,</span> <span class="n">pool</span><span class="p">);</span>
+        <span class="n">abort</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">pool</span> <span class="o">=</span> <span class="n">pool</span><span class="p">;</span>
+    <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_available</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">num_freed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_chunk</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">chunk</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*!
+ * This helper function searches through the small-object 
+ * pool for a chunk that has room for another allocation.
+ * If all chunks are full, a new chunk will be initialized 
+ * and added to the pool.
+ */</span>
+<span class="n">chunk_t</span> <span class="o">*</span> <span class="nf">get_nonfull_chunk</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">chunk_list</span><span class="p">;</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">prev</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="c1">// Try to find a chunk that has available space.</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">chunk</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_available</span> <span class="o">&lt;</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">objects_per_chunk</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+
+        <span class="n">prev</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">;</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_chunk</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// If all chunks are full, we need to allocate a new </span>
+    <span class="c1">// chunk.</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">chunk</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">init_new_chunk</span><span class="p">(</span><span class="n">pool</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">prev</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+            <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next_chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">pool</span><span class="o">-&gt;</span><span class="n">chunk_list</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">chunk</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*!
+ * Given a non-full chunk from a pool, this helper function 
+ * returns a newly allocated object from the chunk.  The 
+ * helper also performs any bookkeeping necessary to record 
+ * that the object has been allocated.
+ */</span>
+<span class="kt">void</span> <span class="o">*</span> <span class="nf">alloc_object_from_chunk</span><span class="p">(</span><span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">chunk</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="c1">// Make sure the chunk isn't already full.</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_available</span> <span class="o">&lt;</span> 
+            <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">pool</span><span class="o">-&gt;</span><span class="n">objects_per_chunk</span><span class="p">);</span>
+
+    <span class="c1">// Allocate a new object from the chunk.</span>
+    <span class="kt">void</span> <span class="o">*</span><span class="n">obj</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">mem</span> <span class="o">+</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_available</span> <span class="o">*</span> 
+                     <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">pool</span><span class="o">-&gt;</span><span class="n">objsize</span><span class="p">;</span>
+    <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_available</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">obj</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="cm">/*!
+ * Allocate a small object from the specified pool.  The pool 
+ * itself knows what size objects it produces, so this 
+ * function does not take a size argument.
+ *
+ * This function always returns a non-NULL value, which is 
+ * not very realistic, but certainly keeps life simple.  If
+ * a chunk-allocation failure occurs, the function will print
+ * an error and then abort().
+ */</span>
+<span class="kt">void</span> <span class="o">*</span> <span class="nf">so_alloc</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">pool</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+
+    <span class="c1">// Find or allocate a chunk that has available space.</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">get_nonfull_chunk</span><span class="p">(</span><span class="n">pool</span><span class="p">);</span>
+
+    <span class="c1">// The chunk should be able to hold a new allocation.</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">chunk</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_available</span> <span class="o">&lt;</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">objects_per_chunk</span><span class="p">);</span>
+
+    <span class="c1">// Allocate a new object from the chunk.</span>
+    <span class="k">return</span> <span class="n">alloc_object_from_chunk</span><span class="p">(</span><span class="n">chunk</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="c1">// === DEALLOCATION FUNCTIONS ==========================</span>
+
+<span class="cm">/*!
+ * Returns true if the specified pointer falls within the 
+ * specified chunk, false otherwise.
+ */</span>
+<span class="n">bool</span> <span class="nf">is_object_in_chunk</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">obj</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">mem</span> <span class="o">&amp;&amp;</span>
+           <span class="n">obj</span> <span class="o">&lt;</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="n">chunk</span><span class="o">-&gt;</span><span class="n">mem</span> <span class="o">+</span> 
+               <span class="n">chunk_mem_size</span><span class="p">(</span><span class="n">chunk</span><span class="o">-&gt;</span><span class="n">pool</span><span class="p">));</span>
+<span class="p">}</span>
+
+
+<span class="cm">/*!
+ * Records that the specified object in the chunk has been 
+ * freed.
+ */</span>
+<span class="kt">void</span> <span class="nf">free_object_in_chunk</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">obj</span><span class="p">,</span> <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">obj</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">chunk</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">);</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">is_object_in_chunk</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">chunk</span><span class="p">));</span>
+
+    <span class="c1">// Record that the object has been freed.</span>
+    <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">num_freed</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="cm">/*!
+ * Returns true if the chunk no longer holds any allocated 
+ * objects, and false otherwise.
+ */</span>
+<span class="n">bool</span> <span class="nf">is_chunk_empty</span><span class="p">(</span><span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">num_freed</span> <span class="o">==</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">pool</span><span class="o">-&gt;</span><span class="n">objects_per_chunk</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="cm">/*!
+ * Release a small object back to the specified pool.
+ *
+ * It is an error to pass in a pointer to an object that is 
+ * not from this pool. This kind of error is usually 
+ * detectable and will result in an error message being 
+ * printed and the program aborted.
+ *
+ * It is also an error to free the same object twice in a row.
+ * This kind of error is not detectable and may cause all 
+ * manner of chaos to ensue.
+ */</span>
+<span class="kt">void</span> <span class="nf">so_free</span><span class="p">(</span><span class="n">smallobj_pool_t</span> <span class="o">*</span><span class="n">pool</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="cp">#ifdef OVERWRITE_MEM
+</span>    <span class="c1">// Overwrite the object that was just released, so that </span>
+    <span class="c1">// access-after-free bugs are more obvious.</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="mh">0xEE</span><span class="p">,</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">objsize</span><span class="p">);</span>
+<span class="cp">#endif
+</span>
+    <span class="c1">// Find the chunk that corresponds to the memory being </span>
+    <span class="c1">// freed.  Also keep track of the "previous chunk" so </span>
+    <span class="c1">// that we can remove completely empty chunks.</span>
+
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">chunk</span> <span class="o">=</span> <span class="n">pool</span><span class="o">-&gt;</span><span class="n">chunk_list</span><span class="p">;</span>
+    <span class="n">chunk_t</span> <span class="o">*</span><span class="n">prev</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">chunk</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_object_in_chunk</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">chunk</span><span class="p">))</span>
+            <span class="k">break</span><span class="p">;</span> <span class="c1">// Found chunk containing the allocation.</span>
+
+        <span class="n">prev</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">;</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_chunk</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">chunk</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"ERROR:  Pointer %p isn't from </span><span class="err">
+</span><span class="s">                             pool %p"</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">pool</span><span class="p">);</span>
+        <span class="n">abort</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="n">free_object_in_chunk</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">chunk</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">is_chunk_empty</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span> <span class="p">{</span>
+        <span class="c1">// This chunk has been completely freed.  Remove it </span>
+        <span class="c1">// from the list.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">prev</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+            <span class="n">pool</span><span class="o">-&gt;</span><span class="n">chunk_list</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_chunk</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">prev</span><span class="o">-&gt;</span><span class="n">next_chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">-&gt;</span><span class="n">next_chunk</span><span class="p">;</span>
+
+<span class="cp">#ifdef OVERWRITE_MEM
+</span>        <span class="c1">// Overwrite the chunk so that access-after-free bugs </span>
+        <span class="c1">// are more obvious.</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="mh">0xEF</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">chunk_t</span><span class="p">)</span> <span class="o">+</span> 
+                <span class="n">chunk_mem_size</span><span class="p">(</span><span class="n">pool</span><span class="p">));</span>
+<span class="cp">#endif
+</span>
+        <span class="n">free</span><span class="p">(</span><span class="n">chunk</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>

@@ -1,0 +1,138 @@
+<p>Physics problems involving mechanical equilibrium are very common. For this reason, we will practice doing a couple of these problems today.</p>
+
+<blockquote>
+  <h2 id="practice-with-mechanical-equilibria">Practice with Mechanical Equilibria</h2>
+</blockquote>
+
+<blockquote>
+  <h3 id="example-1-two-masses-on-an-inclined-plane">Example 1: Two Masses on an Inclined Plane</h3>
+</blockquote>
+
+<p><em>This problem is adapted from Caltech’s Ph1a course.</em></p>
+
+<p>Upon an inclined plane of angle $\theta$ is placed a block of mass $m_2$. Upon $m_2$ is placed another block of mass $m_1$. The coefficient of static friction between $m_2$ and the inclined plane is $\mu_{2s}$ and the coefficient of sliding friction is $\mu_{2k}$. Likewise, the coefficient of static friction between $m_1$ and $m_2$ is $\mu_{1s}$ and the coefficient of sliding friction is $\mu_{1k}$. A force $F$ upward and parallel to the plane is applied to $m_2$.</p>
+
+<p><img src="/assets/images/mech-practice-1.png" alt="practice-1" height="60%" width="60%" /></p>
+
+<ol>
+  <li>What is the acceleration of $m_2$ when $m_1$ just starts to slip on it?</li>
+  <li>What is the maximum value of $F$ before this slipping takes place?</li>
+</ol>
+
+<p>In any of these mechanical equilibrium problems, remember that the initial step is almost always the same: <strong>draw force diagrams and set $\sum \vec{F}=0$</strong>. Here, we can draw the force diagrams for both masses $m_1$ and $m_2$:</p>
+
+<p><img src="/assets/images/mech-practice-1-fd.png" alt="practice-1-force-diagram" height="80%" width="80%" /></p>
+
+<p>This diagram is complicated, so we’ll explain all of the forces we need to account for:</p>
+
+<ol>
+  <li>Force of gravity. We denote the force of gravity on $m_1$ as <script type="math/tex">\vec{F}_{1g}</script> and on $m_2$ as <script type="math/tex">\vec{F}_{2g}</script>.</li>
+  <li>The applied force on $m_2$, which we denote as $\vec{F}$.</li>
+  <li>The normal force on $m_2$ due to the inclined plane, denoted as <script type="math/tex">\vec{N}_2</script>. We also have the normal force on $m_2$ due to the presence of $m_1$, denoted as $\vec{N}_{12}$.</li>
+  <li>By Newton’s third law, there is also a normal force on $m_1$ from $m_2$, denoted as <script type="math/tex">\vec{N}_{21}=-\vec{N}_{12}</script>.</li>
+  <li>The friction force on $m_2$ due to the inclined plane, denoted as $\vec{F}_{2f}$.</li>
+  <li>The friction force on $m_2$ due to $m_1$, denoted as $\vec{F}_{12f}$. By Newton’s third law, there is also a friction force on $m_1$ due to $m_2$, denoted as <script type="math/tex">\vec{F}_{21f}=-\vec{F}_{12f}</script>.</li>
+</ol>
+
+<p>After accounting for all of the forces, we can write the force balance laws for both of the masses in both the $x$ and $y$ directions:</p>
+
+<ol>
+  <li><script type="math/tex">F_{21f}-m_1g\sin\theta=0</script> and <script type="math/tex">N_{21}-m_1g\cos\theta=0</script>.</li>
+  <li><script type="math/tex">F_{2f}+F-F_{12f}-m_2g\sin\theta=F_{2, x}</script> and <script type="math/tex">N_2-N_{12}-F_{2g}\cos\theta=0</script>.</li>
+</ol>
+
+<p>Notice that for the second block, we did not set the right hand side of the $\hat{x}$-direction force balance equation equal to zero. This is because as hinted in the problem, although the first block may be in mechanical equilibrium, the second block may be accelerating in the $\pm\hat{x}$ direction. This is the quantity that we are interested in.</p>
+
+<p>To answer the first question, when $m_1$ just starts to slip, this means that <script type="math/tex">F_{21f}=\mu_{1s}N_{21}</script>. At the same time, this also means that <script type="math/tex">F_{12f}=\mu_1N_{12}=\mu_1N_{21}</script> by Newton’s third law. Plugging this in above gives</p>
+
+<ol>
+  <li><script type="math/tex">\mu_{1s}N_{21}-m_1g\sin\theta=0</script> and <script type="math/tex">N_{21}-m_1g\cos\theta=0</script>.</li>
+  <li><script type="math/tex">\mu_{2k}N_2+F-\mu_{1s}N_{21}-m_2g\sin\theta=F_{2, x}</script> and <script type="math/tex">N_2-N_{21}-m_2g\cos\theta=0</script>.</li>
+</ol>
+
+<p>The first pair of equations gives us $N_{21}=\frac{m_1g}{\sqrt{1+\mu_{1s}^2}}$ and $\sin\theta=\frac{\mu_{1s}}{\sqrt{1+\mu_{1s}^2}}$ (meaning that $\cos\theta=\frac{1}{\sqrt{1+\mu_{1s}^2}}$). Plugging this into the last equation allows us to solve for $N_2$:</p>
+
+<script type="math/tex; mode=display">N_2=N_{21}+m_2g\cos\theta=\frac{(m_1+m_2)g}{\sqrt{1+\mu_{1s}^2}}</script>
+
+<p>And plugging this into the final equation for $F_{2, x}$ and dividing by $m_{2}$ allows us to solve for the acceleration of mass $m_2$ when $m_1$ begins to slip, as desired. We’ll leave this as an exercise to finish up this question. Answering part 2 of this question is easy to do as well: the idea is to take $\mu_{2k}\rightarrow 0$ (that is, there’s <em>no kinetic friction</em> between the mass $m_2$ and the inclined plane), and solve for $F$.</p>
+
+<blockquote>
+  <h3 id="example-2-a-hanging-rope">Example 2: A Hanging Rope</h3>
+</blockquote>
+
+<p><em>This problem is adapted from Caltech’s Ph1a course.</em></p>
+
+<p>A rope of length $2l$ and uniform density (here: mass per unit length) $\rho$ is hanging over a nail in a wall with a piece of length $l$ on both sides. Friction, the thickness of the nail, and the thickness of the rope are negligible. When one creates a slight length difference between the two sides, a net force will start to act on the rope, and it will slide off the nail, faster and faster.</p>
+
+<ol>
+  <li>When the length on one side is $l+x$ (with $0 &lt; x &lt; l$), what is the net force on the rope?</li>
+  <li>Find the velocity as a function of $x$. <em>Hint: make use of $\frac{dv}{dt}=\frac{dv}{dx}\frac{dx}{dt}$.</em> What is the velocity when the rope completely comes off the nail?</li>
+</ol>
+
+<p>When both sides of the rope are the same length, then our physical intuition tells us that the rope is in mechanical equilibrium. This is because the gravitational force is equal on both sides of the rope. What happens when the length on one side is $l+x$? The gravitational force on this side is $F_{&gt;}=mg=\rho(l+x)g$. Meanwhile, the gravitational force on the other side is $F_{&lt;}=mg=\rho(l-x)g$. Therefore, the magnitude of the net downwards force on the rope is</p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+F_{\text{net}}=F_{>}-F_{<}=\rho(l+x)g-\rho(l-x)g=2\rho xg %]]></script>
+
+<p>This answer the first question. The mass of the entire rope is $2\rho l$, meaning that the acceleration of the rope due to this force is $a=\frac{dv}{dt}=\frac{xg}{l}$. At this point, we can make the educated guess that $v=\frac{dx}{dt}=x\sqrt{g/l}$, which that $\frac{dv}{dx}=\sqrt{g/l}$. Plugging this into the hint gives us the expected result, allowing us to conclude that the velocity of the rope as a function of $x$ is given by</p>
+
+<script type="math/tex; mode=display">\vec{v}=-x\sqrt{\frac{g}{l}}\hat{y}</script>
+
+<p>and so the velocity <script type="math/tex">\vec{v}_{\max}</script> when the rope completely comes off at $x=l$ is $\vec{v}_{\text{max}}=-\hat{y}\sqrt{gl}\hat{y}$.</p>
+
+<blockquote>
+  <h3 id="example-3-pulley-on-an-inclined-plane">Example 3: Pulley on an Inclined Plane</h3>
+</blockquote>
+
+<p>Two blocks of mass $m$ and $M$ are connected via pulley with a configuration shown below:</p>
+
+<p><img src="/assets/images/mech-practice-3.png" alt="practice-3" height="60%" width="60%" /></p>
+
+<p>The coefficient of static friction is $\mu_s$ between the block and surface. What is the minimum and maximum mass $M$ so that no sliding occurs?</p>
+
+<p>Again, let’s refer back to our problem-solving algorithm from Problem 1. First, let’s draw the force diagrams for both of the masses:</p>
+
+<p><img src="/assets/images/mech-practice-3-fd.png" alt="mech-practice-3-fd" height="60%" width="60%" /></p>
+
+<p>From <a href="/physics/pulleys/index.html">last time</a>, we know that the pulley gives us that equal magnitude of acceleration and also equal force. This means that $T_M=T_m$ and the acceleration magnitudes are the same. We can then write down the mechanical equilibrium force balance laws for mass $M$, given that we have $mg-T_m=mg-T_M=ma$ for mass $m$:</p>
+
+<ol>
+  <li>$T_M+F_f-Mg\sin\theta=Mg+\mu_sN-Mg\sin\theta=Ma$</li>
+  <li>$N-Mg\cos\theta=0$</li>
+</ol>
+
+<p>This tells us that $N=Mg\cos\theta$, and so plugging this into the first equation and using $T_M-mg=ma$ gives us a system of equations to solve for $a$: $a=\frac{mg-Mg(\sin\theta-\mu_s\cos\theta)}{M+m}$. We want the acceleration to be zero, and solving for $M$ gives $M=\frac{m}{\sin\theta-\mu_s\cos\theta}$.</p>
+
+<p>This represents our first bound on $M$. Notice that in this diagram, the force of friction is in the $+\hat{x}$ direction. Intuitively, this occurs when the mass $M$ is so massive that it has the “desire” to slide down the ramp, even with the extra force of being tethered to mass $m$. $M$ could be very light and therefore be pulled upwards by the mass $m$ as well. In this case, the force of friction would run in the opposite direction, giving us the following force diagrams:</p>
+
+<p><img src="/assets/images/mech-practice-3-fd-2.png" alt="mech-practice-3-fd-2" height="60%" width="60%" /></p>
+
+<p>This changes our $\hat{x}$ equilibrium equation to $T_m-\mu_sN-Mg\sin\theta=Ma$, and after plugging in $N=Mg\cos\theta$ once more, $M=\frac{m}{\sin\theta+\mu_s\cos\theta}$. Therefore, our range of possible $M$ values before the block begins to slip is</p>
+
+<p>$\frac{m}{\sin\theta+\mu_s\cos\theta}&lt; M &lt;\frac{m}{\sin\theta-\mu_s\cos\theta}$</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<blockquote>
+  <h3 id="problem-1">Problem 1</h3>
+</blockquote>
+
+<p><em>This problem is adapted from <a href="https://www.real-world-physics-problems.com/pulley-problems.html">this link</a>.</em></p>
+
+<p>A block of mass $M$ is pulled using a pulley at constant velocity along a surface inclined at angle $\theta$. The coefficient of kinetic friction is $\mu_k$, between block and surface. Determine the pulling force $F$.</p>
+
+<p><img src="/assets/images/mech-practice-4.png" alt="practice-5" height="70%" width="70%" /></p>
+
+<blockquote>
+  <h3 id="problem-2">Problem 2</h3>
+</blockquote>
+
+<p><em>This problem is adapted from <a href="https://www.real-world-physics-problems.com/pulley-problems.html">this link</a>.</em></p>
+
+<p>A block of mass $m$ is lifted at constant velocity using the two pulleys shown.</p>
+
+<p><img src="/assets/images/mech-practice-5.png" alt="practice-5" height="30%" width="30%" /></p>
+
+<p>Determine the magnitude of the pulling force $F$. Ignore the mass of the pulleys.</p>

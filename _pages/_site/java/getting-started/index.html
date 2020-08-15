@@ -1,0 +1,40 @@
+<blockquote>
+  <h2 id="hello-world">Hello, World!</h2>
+</blockquote>
+
+<p>Welcome to Java! Java is one of the most popular programming languages for both beginners and experts, and can be used in everything from finance and modeling to making both mobile and web-based apps. Today, we’ll be learning how to write a simple program to print out <code class="highlighter-rouge">Hello, World!</code>.</p>
+
+<p>Let’s first start off by opening any text editor (i.e. TextEdit if you’re using a Mac), and creating a new file called <code class="highlighter-rouge">HelloWorld.java</code>. In the file, we write</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>In Java, all <code class="highlighter-rouge">.java</code> files are composed of a <code class="highlighter-rouge">class</code> which can be thought of as some object that has certain properties (called <em>fields</em>) and things that it can do (called <em>methods</em>). We will talk about these things later. This class has the name <code class="highlighter-rouge">HelloWorld</code>, and this is a <code class="highlighter-rouge">public</code>ly accessible class that will be able to be used by other people and other programs in the future. All of the fields and functions that are related to this <code class="highlighter-rouge">HelloWorld</code> class will be encased in <code class="highlighter-rouge">{}</code> brackets.</p>
+
+<p>Currently, the class has just one function: <code class="highlighter-rouge">main()</code>. All functions can have inputs and outputs. For this function, we have only one input called <code class="highlighter-rouge">args</code>. Since all we want to do with this program is print out a message, we don’t need to worry about what <code class="highlighter-rouge">args</code> is for now. This <code class="highlighter-rouge">main()</code> method is found in <strong>all</strong> Java classes, and is the entry point into the where our code will begin. <code class="highlighter-rouge">public</code> means that this method <code class="highlighter-rouge">main()</code> is always able to be called by other programs, and <code class="highlighter-rouge">void</code> means that the function doesn’t return anything: it will just do something (in this case, print out a message) and then terminate. We’ll talk about what <code class="highlighter-rouge">static</code> means later.</p>
+
+<blockquote>
+  <p>All Java classes have a method <code class="highlighter-rouge">public static void main(String[] args)</code>.</p>
+</blockquote>
+
+<p>Now that we have the backbone setup, let’s print out the message we’re interested in:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello, World!"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>The one line of code we added is saying “print the message <code class="highlighter-rouge">Hello, World!</code>”. Note that lines of code are always terminated by a semicolon <code class="highlighter-rouge">;</code> in Java.</p>
+
+<p>That’s it! On MacOS, all that’s left is to run the program. First, fire up the Terminal, and then compile the program (we’ll talk about what compiling means later). Test it out by running the Java program.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ javac HelloWorld.java    # Compiles the Java program
+$ java HelloWorld          # Run the Java program
+Hello, World!              # This is our output!
+</code></pre></div></div>
+<p>If you’re currently working on a Windows computer, your terminal commands may be different. I recommend looking into getting a <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">Integrated Developer Environment (IDE)</a>, such as <a href="https://www.eclipse.org/downloads/packages/">Eclipse</a>, which is free to download.</p>

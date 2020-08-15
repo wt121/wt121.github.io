@@ -1,0 +1,90 @@
+<blockquote>
+  <h2 id="basic-techniques">Basic Techniques</h2>
+</blockquote>
+
+<p><a href="/calculus/intro-to-derivatives/index.html">Last time</a>, we talked about some of the different properties of derivatives and the limit definition of the derivative. As another example, lets try evaluating the derivative of $f(x)=x^5$. Using the limit definition and also expanding out the binomial term, we have</p>
+
+<script type="math/tex; mode=display">\frac{df}{dx}=\lim_{h\rightarrow 0}\frac{(x+h)^5-x^5}{h}=\lim_{h\rightarrow 0}\frac{5x^4h+10x^3h^2+10x^2h^3+5xh^4+h^5}{h}</script>
+
+<p>Simplifying gives</p>
+
+<script type="math/tex; mode=display">\frac{df}{dx}=\lim_{h\rightarrow 0}(5x^4+10x^3h+10x^2h^2+5xh^3+h^4)=5x^4</script>
+
+<p>As we can see, this process is doable, but tedious and algebraically hairy. Let’s develop a set of rules to make finding derivatives a little easier:</p>
+
+<ol>
+  <li>If $f(x)=\text{ constant}$, then $f’(x)=0$.</li>
+  <li>If $f(x)=mx+b$, then $f’(x)=m$.</li>
+  <li><strong>Power Rule</strong>: If $f(x)=x^n$, then $f’(x)=nx^{n-1}$. Note that $n$ does not have to be an integer; it can be any real number!</li>
+  <li><strong>Linearity</strong>: If $h(x)=\alpha f(x)\pm \beta g(x)$ for constants $\alpha, \beta$, then $h’(x)=\alpha f’(x)\pm \beta g’(x)$.</li>
+  <li><strong>Product Rule</strong>: If $h(x)=f(x)g(x)$, then $h(x)=f’(x)g(x)+g’(x)f(x)$.</li>
+  <li><strong>Quotient Rule</strong>: If $h(x)=f(x)/g(x)$, then</li>
+</ol>
+
+<script type="math/tex; mode=display">h(x)=\frac{f'(x)g(x)-g'(x)f(x)}{[g(x)]^2}</script>
+
+<p>These are the basic rules. Of course, there are more advanced techniques possible to evaluate derivatives, but we’ll introduce them in the future. Let’s try a few examples:</p>
+
+<blockquote>
+  <h3 id="example-1">Example 1</h3>
+</blockquote>
+
+<p>Let’s evaluate the derivative of $f(x)=(x+1)^2$ using the power rule and linearity. We can expand $f(x)$ as $f(x)=x^2+2x+1$. The derivative of $x^2$ is $2x$, the derivative of $x$ is $1$, and the derivative of $1$ is $0$ using the power rule. Therefore, we have</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[(x+1)^2]=\frac{d}{dx}[x^2]+2\frac{d}{dx}[x]+\frac{d}{dx}[1]=2x+2(1)+0=2x+2</script>
+
+<blockquote>
+  <h3 id="example-2">Example 2</h3>
+</blockquote>
+
+<p>Let’s evaluate the derivative of $f(x)=x^2=x\cdot x$ using the product rule. Here $f(x)=x$ (meaning $f’(x)=1$) and $g(x)=x$ (meaning $g’(x)=1$). Plugging this into the formula from above, we find</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[x^2]=(1)(x)+(1)(x)=2x</script>
+
+<p>We can also evaluate this derivative using the power rule, where $n=2$:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[x^2]=2x^{2-1}=2x</script>
+
+<p>Notice how we get the same result using either method of finding the derivative.</p>
+
+<blockquote>
+  <h3 id="example-3">Example 3</h3>
+</blockquote>
+
+<p>Let’s evaluate the derivative of $f(x)=1/x$ using the quotient rule. Here $f(x)=1$ (meaning $f’(x)=0$) and $g(x)=x$ (meaning $g’(x)=1$). Plugging this into the formula from above, we find</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}\left[\frac{1}{x}\right]=\frac{(0)(x)-(1)(1)}{x^2}=\frac{-1}{x^2}=-x^{-2}</script>
+
+<p>We can also evaluate this derivative using the power rule, where $n=-1$:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}\left[\frac{1}{x}\right]=\frac{d}{dx}\left[x^{-1}\right]=-1x^{-1-1}=-x^{-2}</script>
+
+<p>Notice how we get the same result using either method of finding the derivative.</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<h3 id="problem-1">Problem 1</h3>
+
+<p>Evaluate the derivatives of the following functions:</p>
+<ol>
+  <li>$f(x)=4x^5-5x^4$</li>
+  <li>$f(x)=\frac{x}{1+x^2}$</li>
+  <li>$f(x)=\frac{x^2-1}{x}$</li>
+  <li>$f(x)=(3x^2)\sqrt{x}$</li>
+  <li>$f(x)=2x-\frac{4}{\sqrt{x}}$</li>
+  <li>$f(x)=(x^2+3)(x^3+4)$</li>
+  <li>$f(x)=\frac{\frac{1}{x}+\frac{1}{x^2}}{x-1}$ <em>Hint: It may be easier to rewrite this function first.</em></li>
+</ol>
+
+<h3 id="problem-2">Problem 2</h3>
+
+<p>Assume $f$ and $g$ are differentiable functions such that $f(2)=3$, $f’(2)=-1$, $f’(3)=7$, $g(2)=-5$, and $g’(2)=2$. Find the numerical value of the following expressions:</p>
+
+<ol>
+  <li>$(g-f)’(2)$</li>
+  <li>$(fg)’(2)$</li>
+  <li>$(\frac{f}{g})’(2)$</li>
+  <li>$(5f+3g)’(2)$</li>
+</ol>

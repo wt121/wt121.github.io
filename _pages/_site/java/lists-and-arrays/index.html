@@ -1,0 +1,291 @@
+<p>Today we’ll be learning about a fundamental variable type: lists. A list is simply and ordered set of items. For example, take a list of errands you might have for the day, which may include</p>
+
+<ol>
+  <li>Thaw meat from the freezer.</li>
+  <li>Go to the bank.</li>
+  <li>Buy groceries.</li>
+  <li>Visit friends.</li>
+  <li>Cook dinner.</li>
+</ol>
+
+<p>The order in which we do this tasks is important. For example, we have to thaw the meat at the beginning of the day in order for it to be cooked for dinner. And you can only visit your friends in the afternoon at the time they invited you to come over. As a Java list, one way to represent this list of errands might be</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span><span class="o">[]</span> <span class="n">errands</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"Thaw meat from the freezer"</span><span class="o">,</span> <span class="s">"Go to the bank"</span><span class="o">,</span> 
+                    <span class="s">"Buy groceries"</span><span class="o">,</span> <span class="s">"Visit friends"</span><span class="o">,</span> <span class="s">"Cook dinner"</span> <span class="o">};</span>
+</code></pre></div></div>
+
+<p>Notice that an array of <code class="highlighter-rouge">String</code>s is denoted as <code class="highlighter-rouge">String[]</code> variable type, just as an array of <code class="highlighter-rouge">int</code>s might be denoted as <code class="highlighter-rouge">Int[]</code> variable type. This array has the name <code class="highlighter-rouge">errands</code>. Each errand is called a <em>list element</em>, and is separated by a comma in declaring all of the list elements.</p>
+
+<p>It’s important to note that <strong>all types of lists we will see are 0-indexed!</strong>. This means that our list of errands doesn’t start from the first thing to do. It starts with the <em>zeroth</em> thing to do. Although our list of errands have 5 total things to do, the last item is item number four, not five.</p>
+
+<p>Finally the entire list is encased within two <code class="highlighter-rouge">{}</code> brackets, which indicates that it’s a list. This introduces us to our first way of representing a list:</p>
+
+<blockquote>
+  <h2 id="arrays">Arrays</h2>
+</blockquote>
+
+<p>An array is a way to represent lists that have <em>a fixed number of elements</em>. In other words, an array that starts off with five elements will always have five elements forever. When creating an array, we must know the size of the array beforehand, or we will not be able to create it. This limits which situations may best benefit from arrays. Creating an array looks something like this</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">data</span><span class="o">;</span> <span class="c1">// Declaring the existence of an array of int's</span>
+<span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">10</span><span class="o">];</span> <span class="c1">// Create a new double array of size 10</span>
+</code></pre></div></div>
+
+<p>This new array <code class="highlighter-rouge">data</code> can hold a maximum of 10 doubles. You can also do the declaration and creation steps in a single line, like this:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span><span class="o">[]</span> <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">10</span><span class="o">];</span>
+</code></pre></div></div>
+
+<p>This accomplishes the exact same thing. To access or retrieve the <code class="highlighter-rouge">i</code>th element in our array (remember that arrays are 0-indexed), we use <code class="highlighter-rouge">data[i]</code>. You can write to or read each of the elements using this notation:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Modify an element in the array. */</span>
+<span class="n">data</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">;</span>    <span class="c1">// Sets the 0th element in the array to -2.</span>
+<span class="n">data</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="o">=</span> <span class="mi">13</span><span class="o">;</span>    <span class="c1">// Sets the 4th element in the array to 13.</span>
+<span class="n">data</span><span class="o">[</span><span class="mi">10</span><span class="o">]</span> <span class="o">=</span> <span class="mi">9</span><span class="o">;</span>    <span class="c1">// This returns an error! data has length 10, so</span>
+                 <span class="c1">// the last index of the array is 9. There is no</span>
+                 <span class="c1">// 10th element!</span>
+<span class="n">data</span><span class="o">[</span><span class="mi">6</span><span class="o">]</span> <span class="o">=</span> <span class="s">"Hi!"</span><span class="o">;</span> <span class="c1">// This also returns an error! data was declared to</span>
+                 <span class="c1">// be an array of integers, so we can't set an </span>
+                 <span class="c1">// element equal to a String.</span>
+
+<span class="cm">/* Use or access an element in the array. */</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">data</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">+</span> <span class="mi">2</span><span class="o">);</span> <span class="c1">// Adds 2 to the 0th integer in data</span>
+                                 <span class="c1">// and prints out the result. This </span>
+                                 <span class="c1">// doesn't modify data[0].</span>
+<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">data</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+    <span class="n">data</span><span class="o">[</span><span class="n">i</span><span class="o">]++;</span> <span class="c1">// Add 1 to each element in the array.</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>To get the total number of elements in an array, use the <code class="highlighter-rouge">.length</code> field. For example, <code class="highlighter-rouge">System.out.println(data.length)</code> would print out <code class="highlighter-rouge">10</code>. You cannot remove or add elements from arrays. If you want to remove the <code class="highlighter-rouge">i</code>th element, you could set it to <code class="highlighter-rouge">0</code> or <code class="highlighter-rouge">null</code>. There are also other things you can do with arrays: you can sort them in increasing order, check for equality, and search through the array to find a particular element among many other things. A full list of capabilities is found <a href="https://courses.cs.washington.edu/courses/cse341/98au/java/jdk1.2beta4/docs/api/java/util/Arrays.html">here</a>.</p>
+
+<blockquote>
+  <h2 id="arraylists"><code class="highlighter-rouge">ArrayList</code>s</h2>
+</blockquote>
+
+<p>The fact that the length of arrays cannot be modified is a pretty big limitation. What if we don’t know how many elements will have at the beginning? What if we want the length of our list to change in response to something that dynamically happens in our program? For these reasons, we have <code class="highlighter-rouge">ArrayList</code>s, which build on our arrays by being able to change their size.</p>
+
+<p>At this point, it is useful to talk about the difference between the <em>size</em> of a list versus the <em>capacity</em> of a list. The size of a list is the number of elements that it currently holds, while the capacity of a list is the number of elements that it could potentially hold. Other than that, an <code class="highlighter-rouge">ArrayList</code> is functionally the same as an array that we discussed above. Here are some of the commonly used methods that you can use to manipulate <code class="highlighter-rouge">ArrayList</code>s:</p>
+
+<ol>
+  <li><code class="highlighter-rouge">add(E element)</code> adds the element of type <code class="highlighter-rouge">E</code> to the end of the list. <code class="highlighter-rouge">add(int index, E element)</code> adds the element of type <code class="highlighter-rouge">E</code> at the specified position in the list.</li>
+  <li><code class="highlighter-rouge">clear()</code> removes all elements from the list and resets the size of the <code class="highlighter-rouge">ArrayList</code> to zero.</li>
+  <li><code class="highlighter-rouge">contains(Object o)</code> returns <code class="highlighter-rouge">true</code> (a <code class="highlighter-rouge">boolean</code>) if the list contains the specified <code class="highlighter-rouge">Object</code>.</li>
+  <li><code class="highlighter-rouge">ensureCapacity(int minCapacity)</code> increases the capacity of the <code class="highlighter-rouge">ArrayList</code> to ensure that it can hold at least <code class="highlighter-rouge">minCapacity</code> elements.</li>
+  <li><code class="highlighter-rouge">get(int index)</code> returns the element at the specified position in this list.</li>
+  <li><code class="highlighter-rouge">isEmpty()</code> returns <code class="highlighter-rouge">true</code> (a <code class="highlighter-rouge">boolean</code>) if the list contains no elements (has size zero).</li>
+  <li><code class="highlighter-rouge">remove(int index)</code> removes the element at the specified position in the list. <code class="highlighter-rouge">remove(Object o)</code> removes the first occurrence of the specified element from this list, if it is present. If you happen to be working with an <code class="highlighter-rouge">ArrayList</code> of <code class="highlighter-rouge">int</code>s, the first definition of the <code class="highlighter-rouge">remove()</code> method takes priority.</li>
+  <li><code class="highlighter-rouge">size()</code> returns the number of elements in this list.</li>
+  <li><code class="highlighter-rouge">toArray()</code> converts the <code class="highlighter-rouge">ArrayList</code> into an array.</li>
+  <li><code class="highlighter-rouge">set(int index, E element)</code> replaces the element at the specified position in this list with the specified input element.</li>
+</ol>
+
+<p>Other methods can be found in the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html">official Java documentation</a>.</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<h3 id="problem-1">Problem 1</h3>
+
+<p>Write a Java program that has two methods that act only on arrays of <code class="highlighter-rouge">int</code>s:</p>
+
+<ol>
+  <li>Determine if the arithmetic mean of all the elements in the array is itself an element of the array.</li>
+  <li>Return an <code class="highlighter-rouge">ArrayList</code> of <code class="highlighter-rouge">int</code>s with capacity equal to the size of the original array argument that contains all of the elements that appear more than once in the array.</li>
+</ol>
+
+<p>Here is a <code class="highlighter-rouge">class</code> template for your convenience:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Problem1</span> <span class="o">{</span>
+    <span class="cm">/* No fields or constructor needed for this problem. */</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">mean</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Complete task 1 from above.</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">duplicates</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">data</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Complete task 2 from above.</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Problem1</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Problem1</span><span class="o">();</span>
+
+        <span class="cm">/* Test your methods using two sample data sets. */</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">data1</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span> <span class="o">};</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">data2</span> <span class="o">=</span> <span class="o">{</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">6</span><span class="o">,</span> <span class="mi">6</span> <span class="o">};</span>
+
+        <span class="c1">// Test mean() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing mean() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">mean</span><span class="o">(</span><span class="n">data1</span><span class="o">)</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="na">mean</span><span class="o">(</span><span class="n">data2</span><span class="o">));</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+
+        <span class="c1">// Test duplicates() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing duplicates() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">p</span><span class="o">.</span><span class="na">duplicates</span><span class="o">(</span><span class="n">data1</span><span class="o">)</span> <span class="o">+</span> <span class="s">" "</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="na">duplicates</span><span class="o">(</span><span class="n">data2</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>This is the expected output so you can check your work:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ javac Problem1.java
+$ java Problem1
+Testing mean() method...
+true false
+
+Testing duplicates() method...
+[] [1, 6]
+</code></pre></div></div>
+
+<h3 id="problem-2">Problem 2</h3>
+
+<p>DNA is composed of four different types of “building blocks,” which we’ll refer to as <code class="highlighter-rouge">A</code>, <code class="highlighter-rouge">G</code>, <code class="highlighter-rouge">C</code>, and <code class="highlighter-rouge">T</code>. A valid DNA sequence will be composed of these four types of characters, which can be either uppercase or lower case. For example <code class="highlighter-rouge">AcTggCGa</code> is a valid 8-character DNA sequence. Fill in the following methods for our <code class="highlighter-rouge">class</code> representation of DNA below:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DNA</span> <span class="o">{</span>
+    <span class="c1">// TODO: Include any relevant private fields here.</span>
+
+    <span class="cm">/* 
+     * Constructor takes in a String sequence input and sets the appropriate
+     * appropriate vales for any of your relevant fields. Make sure to
+     * confirm that the input sequence is a valid input sequence: that is,
+     * it only contains A, G, C, T, and/or their lower-case equivalents.
+     */</span>
+    <span class="kd">public</span> <span class="nf">DNA</span><span class="o">(</span><span class="nc">String</span> <span class="n">sequence</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Do anything you need to do here. Make sure to store</span>
+        <span class="c1">// the input DNA sequence as a field so we can use it in other</span>
+        <span class="c1">// methods below.</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* 
+     * This function should return the number of characters in the DNA
+     * sequence.
+     */</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">length</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// TODO</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/*
+     * Sometimes, biologists are interested in a DNA sequence's "GC
+     * content", which is defined to be the percentage of characters 
+     * in the DNA sequence that are G, g, C, or c. Calculate and 
+     * return the GC-content of the DNA sequence.
+     */</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getGCcontent</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// TODO: returns the percentage of characters in the DNA sequence</span>
+        <span class="c1">// that are G, g, C, or c.</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/*
+     * This function should compare the original DNA sequence from the
+     * constructor with another DNA sequence class instance and return
+     * if they are equal. Two DNA sequences are equal if they contain
+     * the same sequence of characters (aside from upper and lower case
+     * differences).
+     */</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="no">DNA</span> <span class="n">otherSeq</span><span class="o">)</span> <span class="o">{</span>
+         <span class="c1">// TODO</span>
+         <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/*
+     * This one should be easier: all too have to do here is print out the
+     * original DNA sequence. Make sure the String is either all upper
+     * case or all lower case (your choice, but I chose to work with all
+     * lower case).
+     */</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// TODO</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/*
+     * Return the complement DNA sequence of the original DNA sequence.
+     */</span>
+    <span class="kd">public</span> <span class="no">DNA</span> <span class="nf">toComplement</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// TODO</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/*
+     * This method should return whether a DNA sequence called otherSeq can
+     * be found within the original DNA sequence represented by this class.
+     * Of course, differences in upper vs. lower case should be ignored.
+     * Return 1 if otherSeq is contained, otherwise return 0.
+     */</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">contains</span><span class="o">(</span><span class="no">DNA</span> <span class="n">otherSeq</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* Don't touch this method! */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="cm">/* We will test the functionality of your different methods here. */</span>
+        <span class="no">DNA</span> <span class="n">seq1</span> <span class="o">=</span> <span class="k">new</span> <span class="no">DNA</span><span class="o">(</span><span class="s">"TTCTcTCGCCAGcACTGTaATAGGCACTAaaAGAGTGAtG"</span><span class="o">);</span>
+        <span class="no">DNA</span> <span class="n">seq2</span> <span class="o">=</span> <span class="k">new</span> <span class="no">DNA</span><span class="o">(</span><span class="s">"ggcacta"</span><span class="o">);</span>
+        <span class="no">DNA</span> <span class="n">seq3</span> <span class="o">=</span> <span class="k">new</span> <span class="no">DNA</span><span class="o">(</span><span class="s">"GtGctGAGCTaagACGGCgt"</span><span class="o">);</span>
+
+        <span class="c1">// Test length() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing length() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq1</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq2</span><span class="o">.</span><span class="na">length</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+
+        <span class="c1">// Test getGCcontent() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing getGCcontent() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq1</span><span class="o">.</span><span class="na">getGCcontent</span><span class="o">()</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq3</span><span class="o">.</span><span class="na">getGCcontent</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+
+        <span class="c1">// Test equals() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing equals() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">seq1</span><span class="o">)</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq2</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">seq3</span><span class="o">));</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        
+        <span class="c1">// Test toString() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing toString() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq2</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq3</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        
+        <span class="c1">// Test toComplement() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing toComplement() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq2</span><span class="o">.</span><span class="na">toComplement</span><span class="o">().</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq3</span><span class="o">.</span><span class="na">toComplement</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+        
+        <span class="c1">// Test contains() method.</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Testing contains() method..."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq1</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">seq2</span><span class="o">)</span> <span class="o">+</span> <span class="s">" "</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">seq2</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">seq1</span><span class="o">));</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><em>Note: In order to write the</em> <code class="highlighter-rouge">toComplement()</code> <em>method, please visit <a href="https://www.bx.psu.edu/old/courses/bx-fall08/definitions.html">this link</a> to understand what a DNA complement sequence is.</em> The relevant snippet is included here:</p>
+
+<blockquote>
+  <p>The reverse complement of a DNA sequence is formed by reversing the letters, interchanging A and T and interchanging C and G. For example, the reverse complement of ACCTGAG is CTCAGGT.</p>
+</blockquote>
+
+<p>This is the expected output so you can check your work:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ javac DNA.java
+$ java DNA
+Testing length() method...
+40 7
+Testing getGCcontent() method...
+0.45 0.6
+Testing equals() method...
+true false
+Testing toString() method...
+ggcacta gtgctgagctaagacggcgt
+Testing toComplement() method...
+tagtgcc acgccgtcttagctcagcac
+Testing contains() method...
+1 0
+</code></pre></div></div>

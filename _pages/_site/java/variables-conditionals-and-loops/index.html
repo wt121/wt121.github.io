@@ -1,0 +1,309 @@
+<blockquote>
+  <h2 id="bytes">Bytes</h2>
+</blockquote>
+
+<p>A <em>bit</em> is a <code class="highlighter-rouge">0</code> or a <code class="highlighter-rouge">1</code>. Bits can be combined to represent numbers in binary representation. For example, the numbers $0$ through 7 can be represented in binary by</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Decimal</td>
+      <td>Binary</td>
+    </tr>
+    <tr>
+      <td>$0$</td>
+      <td><code class="highlighter-rouge">000</code></td>
+    </tr>
+    <tr>
+      <td>$1$</td>
+      <td><code class="highlighter-rouge">001</code></td>
+    </tr>
+    <tr>
+      <td>$2$</td>
+      <td><code class="highlighter-rouge">010</code></td>
+    </tr>
+    <tr>
+      <td>$3$</td>
+      <td><code class="highlighter-rouge">011</code></td>
+    </tr>
+    <tr>
+      <td>$4$</td>
+      <td><code class="highlighter-rouge">100</code></td>
+    </tr>
+    <tr>
+      <td>$5$</td>
+      <td><code class="highlighter-rouge">101</code></td>
+    </tr>
+    <tr>
+      <td>$6$</td>
+      <td><code class="highlighter-rouge">110</code></td>
+    </tr>
+    <tr>
+      <td>$7$</td>
+      <td><code class="highlighter-rouge">111</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In general, if you want to represent the numbers $0$ through $2^n-1$ (or $-2^{n-1}-1$ to $2^{n-1}-1$ if you care about negative numbers too), you need at least $n$ bits. One <em>byte</em> is 8 bits. Therefore, using $z$ bytes of data, we can represent the numbers from $0$ to \(2^{8z}-1\) (or $-2^{8z-1}-1$ to $2^{8z-1}-1$ if, again, you care about negative numbers). The range of numbers we can represent depends on the number of bytes we use: more bytes equals more numbers!</p>
+
+<blockquote>
+  <h2 id="variable-types">Variable Types</h2>
+</blockquote>
+
+<p>There are 8 fundamental variable types (and a bonus important variable type):</p>
+<ol>
+  <li><code class="highlighter-rouge">byte</code>. This is an integer between $-128$ and $127$ represented by 1 byte.</li>
+  <li><code class="highlighter-rouge">short</code>. This is an integer between $-32768$ and $32767$ represented by 2 bytes.</li>
+  <li><code class="highlighter-rouge">int</code>. This is an integer between $-2^{31}$ and $2^{31}-1$ represented by 4 bytes.</li>
+  <li><code class="highlighter-rouge">long</code>. This is an integer between $-2^{63}$ and $2^{63}-1$ represented by 8 bytes.</li>
+  <li><code class="highlighter-rouge">float</code>. This is a decimal with precision up to $6$ or $7$ decimal digits. It has a smaller range than <code class="highlighter-rouge">double</code> and is represented by 4 bytes. Use this if you want to minimize how large your program is and don’t care about precision.</li>
+  <li><code class="highlighter-rouge">double</code>. This is a decimal with precision up to $15$ or $16$ decimal digits. It has a larger range than <code class="highlighter-rouge">float</code> and is represented by 8 bytes. Use this if you care about precision and don’t care about how large your program is.</li>
+  <li><code class="highlighter-rouge">char</code>. Basically a letter in the alphabet. We denote a <code class="highlighter-rouge">char</code> by encasing it around 2 <code class="highlighter-rouge">'</code> single quotes. <code class="highlighter-rouge">char</code>’s also have numerical values assigned by ASCII convention. You can get the numerical value by <em>casting</em> to an integer: <code class="highlighter-rouge">int castedCharacter = (int)c;</code>, where $c$ was of type <code class="highlighter-rouge">char</code>.</li>
+  <li><code class="highlighter-rouge">boolean</code>. You have only two options: <code class="highlighter-rouge">true</code> or <code class="highlighter-rouge">false</code>. 1 byte.</li>
+  <li><code class="highlighter-rouge">String</code>. Technically, <code class="highlighter-rouge">string</code>’s are not a fundamental variable type, but they’re worth talking about. A <code class="highlighter-rouge">string</code> is treated as an <em>array</em> of <code class="highlighter-rouge">char</code>’s. We denote a <code class="highlighter-rouge">String</code> by encasing it around 2 <code class="highlighter-rouge">"</code>double quotes. To get the <code class="highlighter-rouge">char</code> array of the <code class="highlighter-rouge">string</code>, use <code class="highlighter-rouge">java.lang.String.toCharArray(String s)</code>.</li>
+</ol>
+
+<p><em>Note that all number variable types are signed in Java!</em> When declaring the existence of a variable, we do <code class="highlighter-rouge">variableType variableName;</code>. If we also want to set it equal to something at the same time, we do <code class="highlighter-rouge">variableType variableName = initialValue;</code>.</p>
+
+<blockquote>
+  <h2 id="conditional-statements">Conditional Statements</h2>
+</blockquote>
+
+<p>Sometimes, I only want to do something with my code when some other thing is true. To check for equality, use the <code class="highlighter-rouge">==</code> operation (use the <code class="highlighter-rouge">s1.equals(s2)</code> method for <code class="highlighter-rouge">String</code>’s <code class="highlighter-rouge">s1</code> and <code class="highlighter-rouge">s2</code>). To check for inequality, use the <code class="highlighter-rouge">!=</code> operation. $&lt;, \leq, &gt;, \geq$ are represented by <code class="highlighter-rouge">&lt;, &lt;=, &gt;, &gt;=</code>, respectively. Here is an example of using conditional statements:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
+    <span class="c1">// Our class doesn't have any fields.</span>
+
+    <span class="kd">public</span> <span class="nf">Example</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Nothing to construct either.</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doStuff</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">6</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Equals 6."</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Greater than 6."</span><span class="o">);</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Less than 6."</span><span class="o">);</span>
+        <span class="o">}</span>
+        
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">!=</span> <span class="mi">6</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Also not equal to 6."</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Example</span> <span class="n">example</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Example</span><span class="o">();</span>
+        <span class="n">example</span><span class="o">.</span><span class="na">doStuff</span><span class="o">(</span><span class="mi">6</span><span class="o">);</span>
+        <span class="n">example</span><span class="o">.</span><span class="na">doStuff</span><span class="o">(</span><span class="mi">7</span><span class="o">);</span>
+        <span class="n">example</span><span class="o">.</span><span class="na">doStuff</span><span class="o">(</span><span class="mi">3</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>We introduced the idea of <code class="highlighter-rouge">if</code>, <code class="highlighter-rouge">else if</code>, and <code class="highlighter-rouge">else</code> statements. To only do something when multiple conditions are true, use the <code class="highlighter-rouge">&amp;&amp;</code> ‘and’ operator. To only do something when at least one of a number of conditions are true, use the <code class="highlighter-rouge">||</code> ‘or’ operator.</p>
+
+<blockquote>
+  <h2 id="repetitions-and-loops">Repetitions and Loops</h2>
+</blockquote>
+
+<p>Sometimes, we want to keep doing something a repeated number of times. If we know how many times we want to do something, use a <code class="highlighter-rouge">for</code> loop. If we don’t know yet how many times we want to do something use a <code class="highlighter-rouge">while</code> loop. Both types of loops check for equality every iteration. Here is an example of both a <code class="highlighter-rouge">for</code> loop and <code class="highlighter-rouge">while</code> loop that will print the first $n$ positive even numbers:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
+    <span class="c1">// Our class doesn't have any fields.</span>
+
+    <span class="kd">public</span> <span class="nf">Example</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Nothing to construct either.</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">useForLoop</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="cm">/*
+         * int i = 1 declares the existence of a variable i and sets it 
+         * initially equal to 1. The for loop continues to iterate until 
+         * i &lt; n + 1 is no longer true. i++ means that we increment i by 1 
+         * after every iteration.
+         */</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">useWhileLoop</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="cm">/*
+         * As long as n &gt; 0 is true,
+         * continue looping.
+         */</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+             <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n</span><span class="o">);</span>
+             <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+         <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Example</span> <span class="n">example</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Example</span><span class="o">();</span>
+        <span class="c1">// What will this for loop print out?</span>
+        <span class="n">example</span><span class="o">.</span><span class="na">useForLoop</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
+        <span class="c1">// What will this while loop print out? How is it different from </span>
+        <span class="c1">// what the for loop prints out?</span>
+        <span class="n">example</span><span class="o">.</span><span class="na">useWhileLoop</span><span class="o">(</span><span class="mi">5</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<h3 id="problem-1">Problem 1</h3>
+
+<p>In the comments of the main section in the code snippet in the Repetitions and Loops section above, we asked the following three questions:</p>
+
+<ol>
+  <li>What will the <code class="highlighter-rouge">for</code> loop print out?</li>
+  <li>What will the <code class="highlighter-rouge">while</code> loop print out?</li>
+  <li>How are the outputs of the <code class="highlighter-rouge">for</code> and <code class="highlighter-rouge">while</code> loops different?</li>
+</ol>
+
+<p>Please answer these three questions.</p>
+
+<h3 id="problem-2">Problem 2</h3>
+<p><em>This problem is adapted from <a href="http://codeforces.com/problemset/problem/71/A">Codeforces</a>.</em></p>
+
+<p>Sometimes some words like <code class="highlighter-rouge">"localization"</code> or <code class="highlighter-rouge">"internationalization"</code> are so long that writing them many times in one text is quite tiresome. Let’s consider a word too long, if its length is strictly more than 10 characters. All too long words should be replaced with a special abbreviation. This abbreviation is made like this: we write down the first and the last letter of a word and between them we write the number of letters between the first and the last letters. For example, <code class="highlighter-rouge">"localization"</code> will be spelt as <code class="highlighter-rouge">"l10n"</code>, and <code class="highlighter-rouge">"internationalization"</code> will be spelt as <code class="highlighter-rouge">"i18n"</code>. Fill in the following code segments. Before starting, I’d recommend checking out <a href="https://stackoverflow.com/questions/2451650/how-do-i-apply-the-for-each-loop-to-every-character-in-a-string">this link</a>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Problem2</span> <span class="o">{</span>
+    <span class="c1">// Our class doesn't have any fields.</span>
+
+    <span class="kd">public</span> <span class="nf">Problem2</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Nothing to construct either.</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">numChar</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Return how many characters are in the input String s. Do</span>
+        <span class="c1">// not use the .length() method. Try writing this using a for loop.</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">numInternalChar</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Return how many characters are in the input String s, aside</span>
+        <span class="c1">// from the first and the last character. This should be one line</span>
+        <span class="c1">// of code using the result of numChar(String s) method above.</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">abbreviate</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Using the above two methods, rewrite the FILL IN HERE's to </span>
+        <span class="c1">// give the requested abbreviation.</span>
+        
+        <span class="c1">// What do we want to do when the number of letters in the string</span>
+        <span class="c1">// is more than 10?</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span><span class="nc">Character</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span> <span class="o">+</span> 
+                    <span class="nc">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="no">FILL</span> <span class="no">IN</span> <span class="no">HERE</span><span class="o">)</span> <span class="o">+</span> 
+                    <span class="nc">Character</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span>
+                                    <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)));</span>
+        <span class="o">}</span>
+        <span class="c1">// What do we want to do if the word is short instead?</span>
+        <span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="no">FILL</span> <span class="no">IN</span> <span class="no">HERE</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Feel free to change THIS IS OUR STRING to whatever string </span>
+        <span class="c1">// you like!</span>
+        <span class="nc">String</span> <span class="n">ourString</span> <span class="o">=</span> <span class="s">"THIS IS OUR STRING"</span><span class="o">;</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">abbreviate</span><span class="o">(</span><span class="n">ourString</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>Try out your code on your computer and see if it works!</p>
+
+<h3 id="problem-3">Problem 3</h3>
+
+<p><em>This problem is adapted from Caltech’s CS11 course.</em></p>
+
+<p>Let’s write a program to represent an $(x, y)$ pair on the Cartesian plane as a Java <code class="highlighter-rouge">class</code>. Our goal is to be able to calculate the distance between any two points. For this problem, fill in the following code segments. Before starting, I’d recommend checking out <a href="https://stackoverflow.com/questions/8959782/check-if-multiple-conditions-are-all-false-or-all-true-java">this link</a>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.Math</span><span class="o">;</span>
+
+<span class="cm">/**
+ * A two-dimensional point class.
+ **/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Point2d</span> <span class="o">{</span>
+    <span class="cm">/** x coordinate of the point **/</span>
+    <span class="kd">private</span> <span class="kt">double</span> <span class="n">x</span><span class="o">;</span>
+
+    <span class="cm">/** y coordinate of the point **/</span>
+    <span class="kd">private</span> <span class="kt">double</span> <span class="n">y</span><span class="o">;</span>
+
+    <span class="cm">/** Constructor to initialize point to (x, y, z) value **/</span>
+    <span class="kd">public</span> <span class="nf">Point2d</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">double</span> <span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** No-argument constructor: defaults to a point at the origin **/</span>
+    <span class="kd">public</span> <span class="nf">Point2d</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** Return the x coordinate of the point **/</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getX</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// TODO: Fill in what to return here.</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** Return the y coordinate of the point **/</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getY</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// TODO: Fill in what to return here.</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** Set the x coordinate of the point to val**/</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setX</span><span class="o">(</span><span class="kt">double</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Fill in what to do here.</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** Set the y coordinate of the point to val **/</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setY</span><span class="o">(</span><span class="kt">double</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Fill in what to do here.</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** Return if two points are equal. **/</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="nc">Point2d</span> <span class="n">otherPoint</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: Check if two points are equal. Remember that two points </span>
+        <span class="c1">// are equal if their x coordinates are equal and their y </span>
+        <span class="c1">// coordinates are equal.</span>
+    <span class="o">}</span>
+
+    <span class="cm">/** 
+     * Return Euclidean distance between two points with 
+     * double-precision
+     **/</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">distanceTo</span><span class="o">(</span><span class="nc">Point2d</span> <span class="n">otherPoint</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// TODO: You need to use the distance formula here. To find the </span>
+        <span class="c1">// square root of a number, you might need to look it up online. </span>
+        <span class="c1">// A simple Google search</span>
+        <span class="c1">// "square root number Java" should suffice.</span>
+
+        <span class="c1">// Remember to only calculate the distance to another point if</span>
+        <span class="c1">// the two points are not equal! A good way of checking point</span>
+        <span class="c1">// equality is using the equals() method you defined above.</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Create a point (0, 3) on the xy plane.</span>
+        <span class="nc">Point2d</span> <span class="n">p1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Point2d</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
+        <span class="c1">// Create a point (4, 0) on the xy plane.</span>
+        <span class="nc">Point2d</span> <span class="n">p2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Point2d</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+        <span class="c1">// Calculate the distance between the two points. You should expect </span>
+        <span class="c1">// to see 5 from the Pythagorean theorem.</span>
+        <span class="c1">// TODO: Write and print the calculation here.</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+

@@ -1,0 +1,81 @@
+<p>As we’ve seen in our discussion about <a href="/calculus/evaluating-derivatives/index.html">derivatives</a>, the derivative of a differentiable function is almost always another function. Therefore, you could imagine that we could also take the derivative <em>of this derivative</em> as well. This is called the second derivative. Let’s take a look at an example. Define the function</p>
+
+<script type="math/tex; mode=display">f(x)=2x^3-x^2-9x+9</script>
+
+<p>From last time, we learned that we can use the power rule and linearity of the derivative to write</p>
+
+<script type="math/tex; mode=display">f'(x)=\frac{df}{dx}=6x^2-2x-9</script>
+
+<p>The second derivative is simply the derivative of the first derivative of $f(x)$:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}\left[\frac{df}{dx}\right]=\frac{d^2f}{dx^2}=f''(x)=12x-2</script>
+
+<p>In Leibniz notation, the second derivative is denoted as $d^2f/dx^2$, while in the prime notation, it’s denoted as <script type="math/tex">f"(x)</script>. Even higher order derivatives can also be defined. For example, consider the third derivative of $f(x)$:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}\left[\frac{d^2f}{dx^2}\right]=\frac{d^3f}{dx^3}=f'''(x)=12</script>
+
+<p>Of course, we could keep going. In general, the $n$th derivative is denoted as $d^nf/dx^n$ using Leibniz notation. Using the prime notation, you can imagine that putting $n$ number of primes would get quite cumbersome. Therefore, after the third derivative, we denote the $n$th derivative in prime notation as $f^{(n)}(x)$. As an example, the fourth derivative of $f(x)$ would be denoted as $f^{(4)}(x)=0$ using the example from above. (<em>Note that the parentheses in the superscript is important! If you don’t include the parentheses, others might think you’re just taking the fourth power of $f(x)$.</em>)</p>
+
+<p>While we have the capability to take higher order derivatives, typically we are only interested in the first and second derivatives of a function when trying to describe a function graphically. As we’ve learned <a href="/calculus/intro-to-derivatives/index.html">previously</a>, the first derivative can give us clues into what the shape of the original function looks like. Recall that if $df/dx&gt;0$, then the function $f(x)$ is increasing, and if $df/dx&lt;0$, then the function $f(x)$ is decreasing. Let’s see what we can learn about $f(x)$ using the graph of the second derivative. Consider the following example graph of the second derivative of some function $f(x)$:</p>
+
+<p><img src="/assets/images/higher-derivatives-1.png" alt="higher-derivatives-1" height="50%" width="50%" /></p>
+
+<p>In order to figure out what the original function looks like, we first need to know what the first derivative looks like. Because the second derivative is the derivative of the first derivative (read that statement over a couple of times), we can use some of our previous results in graph interpretation. That is, if $d^2f/dx^2&gt;0$, then $df/dx$ is increasing, and if $d^2f/dx^2&lt;0$, then $df/dx$ is decreasing. Therefore, we might have a graph that looks something like</p>
+
+<p><img src="/assets/images/higher-derivatives-2.png" alt="higher-derivatives-2" height="50%" width="50%" /></p>
+
+<p>Now that we have the first derivative, we can sketch what the original function may roughly look like. Remember the important points: if $df/dx&gt;0$, then $f$ is increasing, and if $df/dx&lt;0$, then $f$ is decreasing. Because $df/dx$ is piecewise linear (not piecewise constant anymore), we would expect a piecewise parabolic curve for $f(x)$:</p>
+
+<p><img src="/assets/images/higher-derivatives-3.png" alt="higher-derivatives-3" height="50%" width="50%" /></p>
+
+<p>As we can see, graphing a function from using the second derivative uses the same techniques that we’ve seen previously, but we have to do it twice instead of once. Furthermore, from the example above, we can make sure generalizations of what information we can gather about $f(x)$ from the graph of its second derivative:</p>
+
+<ol>
+  <li>Note that when <script type="math/tex">f"(x)>0</script> from above, $f(x)$ looked like it is “smiling.” We call graphs that look like this <em>concave up</em>, or simply <em>concave</em>.</li>
+  <li>Note that when <script type="math/tex">% <![CDATA[
+f"(x)<0 %]]></script> from above, $f(x)$ looked like it is “frowning.” We call graphs that look like this <em>concave down</em>, or simply <em>convex</em>.</li>
+  <li>Note that when <script type="math/tex">f"(x)=0</script> from above, $f(x)$ is linear. This means that it is neither concave nor convex.</li>
+</ol>
+
+<p>In general, we can conclude that the sign of <script type="math/tex">f"(x)</script> can tell us information about the <em>concavity</em> of $f(x)$.</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<blockquote>
+  <h3 id="problem-1">Problem 1</h3>
+</blockquote>
+
+<p>Determine the fourth derivative of the following two functions:</p>
+
+<ol>
+  <li>$h(t)=3t^7-6t^4+8t^3-12t+18$</li>
+  <li>$4x^{3/5}-\frac{1}{8x^2}-\sqrt{x}$</li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-2">Problem 2</h3>
+</blockquote>
+
+<p>Consider the function defined by the following infinite series: $f(x)=\sum_{n=0}^{\infty}\frac{x^n}{n!}$.</p>
+
+<ol>
+  <li>Write this function out explicitly. That is, what are the first few terms of this series function?</li>
+  <li>Write down an analytical expression for the first derivative of this function.</li>
+  <li>Write down an analytical expression for the second derivative of this function.</li>
+  <li>Write down an analytical expression for the $k$th derivative of this function. What do you notice?</li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-3">Problem 3</h3>
+</blockquote>
+
+<p>Consider the following graph of the first derivative of some function $f(x)$:</p>
+
+<p><img src="/assets/images/higher-derivatives-4.png" alt="higher-derivatives-4" height="50%" width="50%" /></p>
+
+<ol>
+  <li>Sketch the shape of $f”(x)$.</li>
+  <li>Sketch the shape of $f(x)$. Choose an $f(x)$ that is continuous.</li>
+</ol>

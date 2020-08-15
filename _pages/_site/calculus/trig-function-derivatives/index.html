@@ -1,0 +1,123 @@
+<blockquote>
+  <h2 id="proofs">Proofs</h2>
+</blockquote>
+
+<p>Recall the definition of the derivative that we introduced in our lesson on <a href="/calculus/intro-to-derivatives/index.html">Introduction to Derivatives</a>:</p>
+
+<script type="math/tex; mode=display">\frac{df}{dx}=\lim_{h\rightarrow0}\frac{f(x+h)-f(x)}{h}</script>
+
+<p>Consider the case where $f(x)=\sin x$. Plugging this into the definition of the derivative above, we find</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}\left[\sin x\right]=\lim_{h\rightarrow0}\frac{\sin(x+h)-\sin(x)}{h}=\lim_{h\rightarrow 0}\frac{\sin x\cos h+\cos x\sin h-\sin x}{h}</script>
+
+<p>We expanded out $\sin(x+h)$ using the sum-of-angles rule. Using linearity of the limit definition, we can rewrite the right hand side:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}\left[\sin x\right]=\cos x\lim_{h\rightarrow 0}\frac{\sin h}{h}+\sin x\lim_{h\rightarrow 0}\frac{\cos h-1}{h}</script>
+
+<p>Using the <a href="/calculus/limits-and-continuity/index.html">sandwich theorem</a> (also called the <em>squeeze theorem</em>), it can be shown that $\lim_{h\rightarrow 0}\frac{\sin h}{h}=1$ and $\lim_{h\rightarrow 0}\frac{\cos h -1}{h}=0$ (you will prove this in an exercise below). Plugging these results in, we find</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}\left[\sin x\right]=(1)\cos x+(0)\sin x=\cos x</script>
+
+<p>This result tells us that the derivative of $\sin x$ is simply $\cos x$. Let’s see if this intuitively makes sense by plotting both of these functions together:</p>
+
+<p><img src="/assets/images/trig-1.png" alt="sin-derivative" height="70%" width="70%" /></p>
+
+<p>At $x=0$, $\sin(x)=0$, and moreover, it is increasing very rapidly. Therefore, it makes sense that its derivative is positive ($\cos(x)=1$). At $x=\pi/2$, $\sin(x)$ achieves its maximum value, and local maxima correspond to a derivative equal to zero, which makes sense since $\cos(\pi/2)=0$. At $x=\pi$, $\sin(x)=0$, and more importantly, it is decreasingly very rapidly. Therefore, it makes sense that its derivative if negative ($\cos(x)=-1$). With these cursory checks, its clear that $\frac{d}{dx}[\sin x]=\cos x$ seems to be a fairly valid statement.</p>
+
+<p>Let’s also consider the derivative of $f(x)=\cos x$, using the same definition of the derivative from above.</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[\cos x]=\lim_{h\rightarrow 0}\frac{\cos(x+h)-\cos(x)}{h}=\lim_{h\rightarrow 0}\frac{\cos x\cos h-\sin x\sin h-\cos x}{h}</script>
+
+<p>We again expanded out $\sin(x+h)$ using the sum-of-angles rule. Continuing with the same process as above for $f(x)=\sin x$,</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[\cos x]=\cos x\lim_{h\rightarrow0}\frac{\cos h-1}{h}-\sin x\lim_{h\rightarrow 0}\frac{\sin h}{h}</script>
+
+<p>Using the same special limit results from above, we have</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[\cos x]=(0)\cos x-(1)\sin x=-\sin x</script>
+
+<p>Therefore the derivative of $\cos x$ is $-\sin x$. Combining these results, we have</p>
+
+<blockquote>
+  <h2 id="the-main-formulas">The Main Formulas</h2>
+</blockquote>
+
+<blockquote>
+  <script type="math/tex; mode=display">\frac{d}{dx}[\sin x]=\cos x, \quad \frac{d}{dx}[\cos x]=-\sin x</script>
+</blockquote>
+
+<p>Using these two rules, we can derive the following as well:</p>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">\frac{d^n}{dx^n}[\sin x]=\begin{cases}(-1)^{n / 2}\sin x \text{ for even } n\\ (-1)^{(n-1)/2}\cos x\text{ for odd } n\end{cases}</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">\frac{d^n}{dx^n}[\cos x]=\begin{cases}(-1)^{n / 2}\cos x \text{ for even } n\\ (-1)^{(n+1)/2}\cos x\text{ for odd } n\end{cases}</script>
+  </li>
+</ul>
+
+<p>Furthermore, we can also derive the following using the quotient rule:</p>
+
+<ul>
+  <li>
+    <script type="math/tex; mode=display">\frac{d}{dx}[\tan x]=\frac{1}{\cos^2 x}=\sec^2 x</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">\frac{d}{dx}[\csc x]=-\cot x\csc x</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">\frac{d}{dx}[\sec x]=\tan x\sec x</script>
+  </li>
+  <li>
+    <script type="math/tex; mode=display">\frac{d}{dx}[\cot x]=-\frac{1}{\sin^2 x}=-\csc^2 x</script>
+  </li>
+</ul>
+
+<p>You will prove these statements in the exercises below.</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<blockquote>
+  <h3 id="problem-1">Problem 1</h3>
+</blockquote>
+
+<p>Using the squeeze theorem, prove the following limits:</p>
+
+<ol>
+  <li>$\lim_{h\rightarrow 0}\frac{\sin h}{h}=1$</li>
+  <li>$\lim_{h\rightarrow 0}\frac{\cos h-1}{h}=0$</li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-2">Problem 2</h3>
+</blockquote>
+
+<ol>
+  <li>Find the second derivative of $f(x)=\sin x$. Repeat this for $g(x)=\cos x$.</li>
+  <li>Find the third derivative of $f(x)=\sin x$. Repeat this for $g(x)=\cos x$.</li>
+  <li>Find the fourth derivative of $f(x)=\sin x$. Repeat this for $g(x)=\cos x$.</li>
+  <li>Find the fifth derivative of $f(x)=\sin x$. Repeat this for $g(x)=\cos x$.</li>
+  <li>Do you notice any patterns? Do these results agree with the general result that we found above?</li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-3">Problem 3</h3>
+</blockquote>
+
+<p>We gave derivatives of $\tan x, \csc x, \sec x, \cot x$ above. Prove these statements using the quotient rule and the derivatives of $\sin x, \cos x$ that we determined above.</p>
+
+<blockquote>
+  <h3 id="problem-4">Problem 4</h3>
+</blockquote>
+
+<p>Here, we will incorporate these trigonometric function derivatives into our standard repertoire of the chain rule, product rule, quotient rule, and other differentiation techniques. Evaluate the derivatives of the following functions:</p>
+
+<ol>
+  <li>$f(x)=\frac{x^2\sin x}{x^2+1}$</li>
+  <li>$f(x)=\sqrt{x}\cot x$</li>
+  <li>$f(x)=\sqrt[3]{\sin \sqrt[3]{x}}$</li>
+  <li>$f(x)=\cos(\pi x^2)$</li>
+</ol>

@@ -1,0 +1,123 @@
+<p>Last time, we built a very simple Java <code class="highlighter-rouge">class</code> called <code class="highlighter-rouge">HelloWorld</code> that did one thing: print out a message <code class="highlighter-rouge">Hello, World!</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello, World!"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <h2 id="fields">Fields</h2>
+</blockquote>
+
+<p>We can add new layers of complexity to this very simple program that will introduce some new concepts in Java. The first is a <em>field</em>: some property or attribute about the <code class="highlighter-rouge">class</code>. To implement a field, our code might look something like</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span> <span class="c1">// This is our field!</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>We’ve taken out the print statement line in the <code class="highlighter-rouge">main()</code> function for convenience. Note that the field is called <code class="highlighter-rouge">message</code>, and this time, it is only <code class="highlighter-rouge">private</code>: this means that any outside program or person won’t be able to read or change the value of this field in this class. Typically, most fields for classes are private. The field <code class="highlighter-rouge">message</code> has a variable type of <code class="highlighter-rouge">String</code>, which we introduce in a <a href="/java/variables-conditionals-and-loops/index.html">later lesson</a>.</p>
+
+<p>We want our <code class="highlighter-rouge">class</code> to be able to always have a message <code class="highlighter-rouge">Hello, World!</code>. This tells us that we should set the value of the message to <code class="highlighter-rouge">Hello, World!</code> in the <em>constructor</em> of the class. The <em>constructor</em> is a special method of a <code class="highlighter-rouge">class</code> that is only executed once: when the instance of the <code class="highlighter-rouge">class</code> is first created.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span> <span class="c1">// This is our field!</span>
+
+    <span class="cm">/* This is our constructor. */</span>
+    <span class="kd">public</span> <span class="nf">HelloWorld</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">message</span> <span class="o">=</span> <span class="s">"Hello, World!"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <h2 id="constructors">Constructors</h2>
+</blockquote>
+
+<p>Note that the constructor has the same name as the class (this will always be the case). It can also take in input arguments between the parentheses, but here there are no input arguments. The constructor is doing one thing: setting the field <code class="highlighter-rouge">message</code> of <code class="highlighter-rouge">this</code> instance of a class, which we refer to as <code class="highlighter-rouge">this.message</code>, equal to the <code class="highlighter-rouge">String</code> <code class="highlighter-rouge">Hello, World!</code>. This will be done for every instance of this <code class="highlighter-rouge">HelloWorld</code> class.</p>
+
+<blockquote>
+  <h2 id="methods">Methods</h2>
+</blockquote>
+
+<p>Remember that we said previously that the field <code class="highlighter-rouge">message</code> cannot be accessed by other programs right now, due to its <code class="highlighter-rouge">private</code> permissions. However, in some cases, we might want to be able to read the <code class="highlighter-rouge">String</code> in order to print out our message. To do this, we have to define a new <em>method</em> that our <code class="highlighter-rouge">class</code> can do. A <em>method</em> is just a function that the <code class="highlighter-rouge">class</code> can perform:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span> <span class="c1">// This is our field!</span>
+
+    <span class="cm">/* This is our constructor. */</span>
+    <span class="kd">public</span> <span class="nf">HelloWorld</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">message</span> <span class="o">=</span> <span class="s">"Hello, World!"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* This is a method. */</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getMessage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">message</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>We’ve defined a new method called <code class="highlighter-rouge">getMessage()</code>. This method has <code class="highlighter-rouge">public</code> permissions, and it will return (output) a <code class="highlighter-rouge">String</code>. It will return the <code class="highlighter-rouge">message</code> associated with <code class="highlighter-rouge">this</code> instance of the class that we’re working with, which again, we refer to as <code class="highlighter-rouge">this.message</code>.</p>
+
+<blockquote>
+  <h2 id="class-instances">Class Instances</h2>
+</blockquote>
+
+<p>All that’s left to do now is print our message <code class="highlighter-rouge">Hello, World!</code> in the main function:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">HelloWorld</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">message</span> <span class="o">=</span> <span class="s">"Hello, World!"</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getMessage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">message</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">HelloWorld</span> <span class="n">abc</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HelloWorld</span><span class="o">();</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">abc</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>What are these two new lines of code in <code class="highlighter-rouge">main()</code> doing? The first line is declaring the existence of a <code class="highlighter-rouge">new</code> instance of our <code class="highlighter-rouge">class</code> called <code class="highlighter-rouge">HelloWorld</code>: the same one that we went through all the trouble of defining its fields and methods for above. Declaring new instances of a <code class="highlighter-rouge">class</code> always follows the same format:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">NameOfClass</span> <span class="n">variableName</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">NameofClass</span><span class="o">(</span><span class="n">anyInputArgumentsHere</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>In constructing this new <code class="highlighter-rouge">HelloWorld</code> instance called <code class="highlighter-rouge">abc</code>, the constructor method also set the <code class="highlighter-rouge">message</code> of <code class="highlighter-rouge">abc</code> equal to <code class="highlighter-rouge">Hello, World!</code>. Therefore, when the method <code class="highlighter-rouge">getMessage()</code> is called on <code class="highlighter-rouge">abc</code>, it will return <code class="highlighter-rouge">Hello, World!</code>. The last line therefore tells our program to print the message of <code class="highlighter-rouge">abc</code>, which should be <code class="highlighter-rouge">Hello, World!</code> if our program works correctly.</p>
+
+<p>Let’s run this program again using MacOS Terminal, just like we did last time.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ javac HelloWorld.java
+$ java HelloWorld
+Hello, World!
+</code></pre></div></div>
+
+<p>This gives us the expected output, so our program works!</p>
+
+<p>Why did we go through all the trouble of defining all these methods and fields? For a simple program that just prints our <code class="highlighter-rouge">Hello, World!</code>, defining these features was probably not needed. However, as our Java programs get more and more complicated, we will inevitably use a bunch of different fields and methods. Today was more of an introduction to what these things are.</p>
+
+<blockquote>
+  <h2 id="comments">Comments</h2>
+</blockquote>
+
+<p>One last thing. In some of our above code samples, you may have seen phrases or sentences prefixed with <code class="highlighter-rouge">//</code> or encased by <code class="highlighter-rouge">/* */</code> or <code class="highlighter-rouge">/** **/</code>. These things are called <em>comments</em>, and are written solely for being able to read and understand the code. The computer and program ignores comments entirely.</p>

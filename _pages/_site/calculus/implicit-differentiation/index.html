@@ -1,0 +1,113 @@
+<p>Consider the following function $y=f(x)$ defined by the equation $2x^3-5xy-y^2=3$. Suppose that we want to find the derivative of $y$. How would we go about this? This equation is not in the standard form $y=\text{some function of }x$ that we’re used to, and it can’t be easily rewritten into this standard form because of the mixed terms like $-5xy$ that are present. At first glance, it seems like this function is not differentiable.</p>
+
+<p>We call functions defined in this way to be <em>implicitly defined</em>. A function is called an  <strong>explicit function</strong> when it’s written in the form of $y=\text{some function of }x$. There’s no terms dependent on $y$ on the right hand side, and there’s no terms dependent on $x$ on the left hand side. On the other hand, a function is called an <strong>implicit function</strong> when there are $x$- and $y$- dependent terms all mixed together. For example, the function $y=f(x)$ defined by the equation $2x^3-5xy-y^2=3$ above is considered to be an <em>implicit function</em>. Today, we’ll be learning how to differentiate implicit functions.</p>
+
+<blockquote>
+  <h2 id="introduction">Introduction</h2>
+</blockquote>
+
+<p>Let’s go back to our earlier example. Intuition might tell us to simply take the derivative of both sides of this equation with respect to $x$. Using linearity of the derivative, we have</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[2x^3]-\frac{d}{dx}[5xy]-\frac{d}{dx}[y^2]=\frac{d}{dx}[3]=0</script>
+
+<p>The first term on the left hand side is pretty easy to evaluate, but how do we differentiate a term that is dependent on $y$, which it itself may be dependent on $x$? The trick is to use the <a href="/calculus/chain-rule/index.html">chain rule</a>. For example, consider the third term on the left hand side. We can use the chain rule to rewrite it:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[y^2]=\frac{dy}{dx}\frac{d}{dy}[y^2]</script>
+
+<p>Now, the differentiation variable exactly matches the function variable, and so the derivative is easy to evaluate:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[y^2]=2y\frac{dy}{dx}</script>
+
+<p>Similarly, for the second term on the left hand side, we have (using the product rule)</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[5xy]=5x\frac{dy}{dx}+5y\frac{dx}{dx}=5x\frac{dy}{dx}+5y</script>
+
+<p>Plugging in these results from above, we have</p>
+
+<script type="math/tex; mode=display">6x^2-5x\frac{dy}{dx}-5y-2y\frac{dy}{dx}=(6x^2-5y)-\frac{dy}{dx}(5x+2y)=0</script>
+
+<p>Note that since we are trying to solve for the derivative of $y=f(x)$, the $\frac{dy}{dx}$ term is exactly what we are solving for! Rearranging terms gives</p>
+
+<script type="math/tex; mode=display">\frac{dy}{dx}=\frac{6x^2-5y}{5x+2y}</script>
+
+<p>This gives us the derivative of $y$. Now, you might be scratching your head and feel like something looks off. Why do we still have terms dependent on $y$ on the right hand side?</p>
+
+<p>In the past, our explicit functions could yield explicitly defined derivatives that were solely a function of $x$. However, this may not be always the case. The derivative of $y$ can indeed depend on the function $y$ itself: this is not a problem! As an example consider the function $y=h(x)=x^n$. The power rule tells us that $h(x)=nx^{n-1}$. Another way of writing this derivative is</p>
+
+<script type="math/tex; mode=display">\frac{dy}{dx}=nx^{n-1}=n\frac{x^n}{x}=\frac{ny}{x}</script>
+
+<p>This definition of the derivative is equally valid. Here, the derivative of $y$ is defined as a function of both $y$ and $x$. In this case, we can switch back and forth between our explicit and implicit definitions of $dy/dx$. However, as we saw in the previous problem, this may not always be the case.</p>
+
+<blockquote>
+  <h2 id="another-example">Another Example</h2>
+</blockquote>
+
+<p>Consider the function $y=f(x)$ implicitly defined by the equation $x^2+y^2=r^2$, where $r$ is some constant. As you might remember from geometry, this is the equation of a circle with radius $r$ centered at the origin. We might be interested in finding the tangent line to the circle at a point $(r\cos\theta, r\sin\theta)$. Let’s try to accomplish this using implicit differentiation:</p>
+
+<script type="math/tex; mode=display">\frac{d}{dx}[x^2]+\frac{d}{dx}[y^2]=\frac{d}{dx}[r^2]=0</script>
+
+<p>Again, using the chain rule,</p>
+
+<script type="math/tex; mode=display">2x+\frac{dy}{dx}\frac{d}{dy}[y^2]=2x+2y\frac{dy}{dx}=0 \longrightarrow \frac{dy}{dx}=-\frac{2x}{2y}=-\frac{x}{y}</script>
+
+<p>The slope of the tangent line at $(r\cos\theta, r\sin\theta)$ is therefore</p>
+
+<script type="math/tex; mode=display">\left.\frac{dy}{dx}\right\vert_{x=r\cos\theta, y=r\sin\theta}=-\frac{r\cos\theta}{r\sin\theta}=-\cot\theta</script>
+
+<p>Therefore, using point-slope form, the equation for the tangent line is</p>
+
+<script type="math/tex; mode=display">y-r\sin\theta=-\cot\theta(x-r\cos\theta)</script>
+
+<p>How might we do this problem without implicit differentiation? Our first move would probably be to solve for $y$, giving <script type="math/tex">y=\pm\sqrt{r^2-x^2}</script>. For convenience, we will only look at the positive root, although the same reasoning can be applied for the negative root. Using the chain rule (derive this for yourself), we have</p>
+
+<script type="math/tex; mode=display">\frac{dy}{dx}=\frac{-2x}{2\sqrt{r^2-x^2}}=-\frac{x}{\sqrt{r^2-x^2}}</script>
+
+<p>Is this the same result as the one we obtained using implicit differentiation? Recall that <script type="math/tex">y=\sqrt{r^2-x^2}</script>, and so</p>
+
+<script type="math/tex; mode=display">\frac{dy}{dx}=-\frac{x}{\sqrt{r^2-x^2}}=-\frac{x}{y}</script>
+
+<p>as expected. This shows us that implicit and explicit differentiation (when possible) gives us the same result. However, with the explicit derivative result, the derivative is “uglier” and more complicated with the radical sign that we have to deal with. This shows that in some cases, it may be preferable to approach a problem using implicit differentiation, even if you can take the explicit derivative!</p>
+
+<blockquote>
+  <h2 id="exercises">Exercises</h2>
+</blockquote>
+
+<blockquote>
+  <h3 id="problem-1">Problem 1</h3>
+</blockquote>
+
+<p>Use implicit differentiation to find the derivative $dy/dx$ of the following functions:</p>
+
+<ol>
+  <li>$\tan(x^2y^4)=3x+y^2$</li>
+  <li>$7y^2+\sin(3x)=12-y^4$</li>
+  <li>$2y^3+4x^2-y=x^6$</li>
+  <li>$x^2+y^2=\sin(xy)$</li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-2">Problem 2</h3>
+</blockquote>
+
+<p>Consider the equation of the circle $x^2+y^2=r^2$ for fixed $r$ that we discussed above. We showed previously that $\frac{dy}{dx}=-\frac{x}{y}=-\cot\theta$ for any point on the circle.</p>
+
+<ol>
+  <li>Using the result for the first derivative, find the second derivative $d^2y/dx^2$ in terms of $x$, $y$, and/or $y’$.</li>
+  <li>Using the result for the first derivative, can you rewrite your expression for the second derivative in terms of only $x$ and $y$?</li>
+  <li>Using equality $x^2+y^2=r^2$, can you rewrite your expression for the second derivative in terms of only $r$ and $y$?</li>
+</ol>
+
+<blockquote>
+  <h3 id="problem-3">Problem 3</h3>
+</blockquote>
+
+<p><em>This is a challenge problem.</em></p>
+
+<p>Suppose there is a function <script type="math/tex">f</script> defined by <script type="math/tex">f(x+y)=f(x)+f(y)+x^2y+xy^2</script> for all $x$ and $y$, and <script type="math/tex">\lim_{x\rightarrow 0}\frac{f(x)}{x}=1</script>.</p>
+
+<ol>
+  <li>What is $f(0)$?</li>
+  <li>What is $f’(0)$?</li>
+  <li>What is $f(x)$?</li>
+  <li>What is $f’(x)$?</li>
+</ol>

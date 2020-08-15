@@ -1,0 +1,155 @@
+<p><em>The link to the full 38-minute lecture can be found <a href="https://www.youtube.com/watch?v=P60kCrOc6LQ">here</a>.</em></p>
+
+<blockquote>
+  <h2 id="the-big-picture">The Big Picture</h2>
+</blockquote>
+
+<p><strong>Statistical Learning</strong> is a subfield of modern statics that develops concepts and methods for</p>
+
+<ul>
+  <li>understanding data.</li>
+  <li>making predictions based on the data.</li>
+  <li>making data-informed decisions.</li>
+</ul>
+
+<p>Statistical learning plays a key role in science, engineering, finance, and medicine. The availability of <em>cheap computing power</em> and the <em>explosion of data</em> revolutionized the field of classical statistics. As a result, a dichotomy exists between classical statistics (which many of us may be familiar with from AP Statistics or introductory statistics) and modern physics:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Classical Statistics</strong></td>
+      <td><strong>Modern Statistics</strong></td>
+    </tr>
+    <tr>
+      <td>Problems come from surveys of human populations, agricultural experiments, and industrial experiments.</td>
+      <td>Problems come from… everywhere!</td>
+    </tr>
+    <tr>
+      <td>Data sets are small.</td>
+      <td>Data sets are large (i.e. “big data”).</td>
+    </tr>
+    <tr>
+      <td>Solutions are analytical, and often done by hand.</td>
+      <td>Solutions are numerical, empirical, and almost always done on a computer.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>In statistical learning, we are primarily interested in the second column. Since data and data-related problems appear everywhere and computers are essentially omnipresent, modern methods for <strong>learning from data</strong> have been (and continue to be) developed by researchers from various fields. For example, we have the following mappings from classical fields to study to recently developed subfields:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Classical Field</strong></td>
+      <td><strong>Recent Subfield</strong></td>
+    </tr>
+    <tr>
+      <td>Statistics</td>
+      <td>Statistical Learning</td>
+    </tr>
+    <tr>
+      <td>Computer Science</td>
+      <td>Machine Learning</td>
+    </tr>
+    <tr>
+      <td>Engineering</td>
+      <td>Pattern Recognition</td>
+    </tr>
+    <tr>
+      <td>Biology/Medicine</td>
+      <td>Bioinformatics</td>
+    </tr>
+    <tr>
+      <td>Finance</td>
+      <td>Financial Machine Learning/Quantitative Analysts</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Each of these subfields have their own technologies, jargon, and terminology, which can make cross-talk between different fields difficult. Therefore, our main goal is to discuss the most fundamental, shared ideas and methods for learning from data and explaining them in a statistical framework.</p>
+
+<blockquote>
+  <h2 id="types-of-learning-problems">Types of Learning Problems:</h2>
+</blockquote>
+
+<p>There are three main types of learning problems in statistical learning:</p>
+
+<ol>
+  <li><strong>Supervised Learning</strong>: This one is probably the most well-developed. In supervised learning, we are interested in looking at a complex system that takes in input $X$ and outputs $Y$. This system is so complex that it is difficult <em>or even impossible</em> to describe exactly. Our goal in supervised learning is to construct a statistical model for predicting the output $Y$ from input $X$ based on a certain set of training data <script type="math/tex">\{(X_1, Y_1), \ldots, (X_N, Y_N)\}</script>. This training data comes from previous observations. There are two types of supervised learning, which we will treat differently in terms of the math:
+    <ol>
+      <li><strong>Regression</strong>: If the output $Y$ is quantitative (continuous), then the problem is called regression. For example, regression can be used to determine how much stock to buy of which companies based on the status of the market.</li>
+      <li><strong>Classification</strong>: If the output $Y$ is qualitative (categorical), then the problem is called classification. This is useful in image recognition and determining whether a bank should give out a loan to a client.</li>
+    </ol>
+  </li>
+  <li><strong>Unsupervised Learning</strong>: This one is a bit more complicated. In unsupervised learning, we’re given a set of training data ${X_1, \ldots, X_n}$, and our goal is to understand the <em>structure</em> of the data set. Notice that there’s no outputs given in the training data, and so it is sometimes called <em>unlabeled data</em>. Some problems in unsupervised learning might involve:
+    <ol>
+      <li><strong>Clustering</strong>: Divide ${X_1, \ldots, X_n}$ into relatively distinct groups. This can be helpful in categorizing shoppers at a grocery market in order to know what to advertise to different groups of people.</li>
+      <li><strong>Dimensionality Reduction</strong>: Represent the data ${X_1, \ldots, X_n}$ in a small space: <script type="math/tex">\{X_i\in\mathbb{R}^D\}\rightarrow \{\tilde{X}_i\in\mathbb{R}^d\}</script> with $d\ll D$. This is helpful in making programs more computationally efficient and problems more tractable.</li>
+      <li><strong>Generative Modeling</strong>: Model a mechanism that produced ${X_1, \ldots, X_n}$. One application is the generation of synthetic earthquake data.</li>
+    </ol>
+  </li>
+  <li><strong>Reinforcement Learning</strong>: The goal is to infer optimal sequential actions based on the rewards received as a result of previous actions. Same examples of this include:
+    <ol>
+      <li>Training a car to <a href="https://medium.com/@jeremyscohen/deep-reinforcement-learning-for-self-driving-cars-an-intro-4c8c08e6d06b">self-drive</a> and navigate a given environment.</li>
+      <li>Training an algorithm to <a href="https://en.wikipedia.org/wiki/AlphaZero">play chess</a>.</li>
+    </ol>
+  </li>
+</ol>
+
+<p>In this course, we will be primarily interested in <em>supervised learning</em>.</p>
+
+<blockquote>
+  <h2 id="supervised-learning-notation-and-terminology">Supervised Learning: Notation and Terminology</h2>
+</blockquote>
+
+<p>We will use the following notation with regards to inputs:</p>
+
+<ul>
+  <li><script type="math/tex">X=(X_1, \ldots, X_p)^T</script> is a vector of inputs (ada predictors, features). $p$ is the number of inputs, and <script type="math/tex">X</script> represents a generic input vector (always a column vector in our convention).</li>
+  <li><script type="math/tex">x_i=(x_{i1}, \ldots, x_{ip})^T</script> is the $i$th observed value of $X$, with $i=1, \ldots, N$. Here, $N$ represents the number of observations, and $x_i\in\mathbb{R}^p$ is a $p$-vector.</li>
+  <li><script type="math/tex">x^{(j)}=(x_{1j}, \ldots, x_{Nj})^T</script> is the vector of all observations of an input <script type="math/tex">X_j</script>, with <script type="math/tex">j=1, \ldots, N</script>. Therefore, we can define</li>
+</ul>
+
+<script type="math/tex; mode=display">% <![CDATA[
+\mathbb{X}=\begin{bmatrix} x_{11} & \cdots & x_{1p} \\ \vdots & \vdots & \vdots \\ x_{N1} & \cdots & x_{Np}\end{bmatrix}=\begin{bmatrix} x_1^T \\ \vdots \\ x_N^T\end{bmatrix}=\begin{bmatrix} x^{(1)} & \cdots & x^{(p)}\end{bmatrix} %]]></script>
+
+<p>Here, <script type="math/tex">x_{ij}</script> represents the value of the $j$th input in the $i$th observation.</p>
+
+<p>We will use the following notation with regards to outputs:</p>
+
+<ul>
+  <li>$Y\in\mathbb{R}$ is a <em>quantitative output</em> (aka response) corresponding to $X$.</li>
+  <li>$y_i$ is the $i$th observed value of $Y$ that corresponds to $x_i$, with $i=1, \ldots, N$.</li>
+  <li>$G\in\mathcal{G}$ is a <em>categorical output</em> (aka class) corresponding to $X$. Here, $\mathcal{G}$ represents the set of possible groups/classes that we can group $G$ into.</li>
+  <li>$g_i$ is the $i$th observation of $G$ that corresponds to $x_i$, with $i=1, \ldots, N$.</li>
+</ul>
+
+<p>In <strong>statistical decision theory</strong>, we are given the training data, which is in the form of <script type="math/tex">\{(x_1, y_1), \ldots, (x_N, y_N)\}</script> for regression problems and <script type="math/tex">\{(x_1, g_1), \ldots, (x_N, g_N)\}</script> for classification problems, and the value of the input $X$. Using this information, we want to be able to make a good prediction $\hat{Y}$ or $\hat{G}$ of the true output $Y$ or $G$. Let’s start with regression.</p>
+
+<blockquote>
+  <h2 id="regression">Regression</h2>
+</blockquote>
+
+<p>Define $X\in\mathbb{R}^p$ to be a random input, and $Y\in\mathbb{R}$ is the corresponding random output. We want to find a <strong>prediction rule</strong> $f:\mathbb{R}^p\rightarrow \mathbb{R}$ such that $\hat{Y}=f(X)\approx Y$. In order to measure the accuracy of this prediction, we need to define a <strong>loss function</strong> <script type="math/tex">L:\mathbb{R}\times\mathbb{R}\rightarrow \mathbb{R}</script>. The <strong>expected loss</strong> is therefore <script type="math/tex">\mathbb{E}[L(Y, \hat{Y})]</script>.</p>
+
+<script type="math/tex; mode=display">\mathbb{E}[L(Y, \hat{Y})]=\mathbb{E}[L(Y, f(X))]=\begin{cases} \text{small}, \quad f\text{ is good,}\\ \text{large}, \quad f\text{ is bad}\end{cases}</script>
+
+<p>By and large, the most popular loss function is the <strong>squared error loss function</strong> (aka the $L_2$ loss function), which is defined by $L_2(Y, \hat{Y})=(Y-\hat{Y})^2$. The corresponding expected loss is therefore called the <strong>mean squared error (MSE)</strong>:</p>
+
+<script type="math/tex; mode=display">\text{MSE}(f)=\mathbb{E}[(Y-\hat{Y})^2]=\mathbb{E}[(Y-f(X))^2]</script>
+
+<p>Our goal in statistical learning regression is to determine $f$ that minimizes $\text{MSE}(f)$. We can accomplish this by <em>conditioning on $X$</em> and using the <strong>law of total expectation</strong>:</p>
+
+<script type="math/tex; mode=display">\text{MSE}(f)=\mathbb{E}\left[\mathbb{E}\left[(Y-f(X))^{2} | X\right]\right]</script>
+
+<p>The inner expectation value is with respect to $Y$, while the outer expectation value is with respect to $X$. Evaluating this expectation value is explained <a href="https://youtu.be/P60kCrOc6LQ?t=1721">here</a>. The <strong>inner conditional expectation</strong> is derived to be</p>
+
+<script type="math/tex; mode=display">\mathbb{E}[(Y-f(x))^2|X=x]=\mathbb{V}[Y|X=x]+(\mathbb{E}[Y|X=x]-f(x))^2</script>
+
+<p>Here, $\mathbb{V}$ represents the <em>variance</em> of the random variable argument. The mean squared error is therefore the expectation value of this inner expectation value. In order to minimize this mean squared error with respect to $f$, the second term must be equal to zero (as $f$ doesn’t participate in the first term), and so <script type="math/tex">f(X)=\mathbb{E}[Y\vert X]</script>. Therefor, the <em>best prediction</em> (in terms of the $L_2$ loss function) for the response $\hat{Y}$ to input $X=x$ is</p>
+
+<script type="math/tex; mode=display">f(x)=\mathbb{E}[Y|X=x]</script>
+
+<p>This function is so important in statistical learning that it even has its own name (although uncreative): the <strong>regression function</strong>.</p>
+
+<p>Although the $L_2$ loss function is most commonly used, there’s also the <script type="math/tex">L_1</script> loss function defined as <script type="math/tex">L_1(Y, \hat{Y})=\vert Y-\hat{Y}\vert</script>. However, this loss function is often difficult to implement in many algorithms, which is why it’s not as commonly used. However, $L_1$ does have its benefits. For example, $L_1$-derived prediction functions are <a href="https://rishy.github.io/ml/2015/07/28/l1-vs-l2-loss/">more resistant to the presence of outliers</a>.</p>

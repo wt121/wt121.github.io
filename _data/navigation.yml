@@ -1,12 +1,12 @@
 main:
   - title: "About"
     url: /about/
-  - title: "Test Section"
+  - title: "Meeting Times"
     url: /test-section/
-  - title: "This is also a test section"
+  - title: "Blog Posts"
     url: /teaching-material/
-  - title: "Projects"
+  - title: "Host a Meeting"
     url: /projects/
-  - title: "Leisure"
+  - title: "Submit a Blog Post"
     url: /fun/
   

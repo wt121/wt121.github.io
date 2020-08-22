@@ -1,6 +1,6 @@
 ---
 permalink: /teaching-material/
-title: "Teaching Material"
+title: "Blog Posts"
 toc: true
 toc_label: "Topics"
 ---

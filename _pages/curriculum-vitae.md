@@ -1,6 +1,6 @@
 ---
 permalink: /test-section/
-title: "Curriculum Vitae"
+title: "Meeting Times"
 toc: true
 toc_label: "Navigation"
 ---

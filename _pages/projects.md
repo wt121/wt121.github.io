@@ -1,6 +1,6 @@
 ---
 permalink: /projects/
-title: "Projects"
+title: "How to Connect"
 toc: true
 toc_label: "Contents"
 ---

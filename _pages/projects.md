@@ -1,7 +1,7 @@
 ---
 permalink: /projects/
 title: "How to Connect"
-toc: true
+toc: false
 toc_label: "Contents"
 ---
 

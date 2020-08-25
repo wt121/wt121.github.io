@@ -1,13 +1,24 @@
 ---
 permalink: /projects/
-title: "How to Connect"
+title: "Host and Join Instructions"
 toc: false
 toc_label: "Contents"
 ---
 
-This is another test.
 
-To Host or Sign Up for a Meeting, fill out the google form below.
+
+### **Host Instructions**
+
+To host a meeting, fill out the google form below. Make sure to include your name, meeting time with time zone, and email. You can also include an optional description of some of your interests and hobbies for others who may also want to join.
+
+
+
+### **Join Instructions**
+
+To join a meeting, view the spreadsheet on the "Meeting Times" page. If one of the meeting times works well, fill out the google form and request to join that specific meeting. Your name will also be added to the spreadsheet. 
+
+
+
 
 
 

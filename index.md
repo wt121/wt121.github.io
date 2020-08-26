@@ -1,6 +1,6 @@
 ---
 title: "About"
-author_profile: true
+author_profile: false
 ---
 
 This website is a place where people who stutter can set up meetings with one another to practice their speech. 

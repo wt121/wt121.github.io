@@ -1,5 +1,6 @@
 ---
 permalink: /projects/
+author_profile: false
 title: "Host and Join Instructions"
 toc: false
 toc_label: "Contents"

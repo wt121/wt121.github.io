@@ -1,6 +1,7 @@
 ---
 permalink: /test-section/
 title: "Meeting Times"
+author_profile: false
 toc: true
 toc_label: "Navigation"
 ---

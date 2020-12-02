@@ -24,7 +24,7 @@ search: true
 search_provider:
 
 google:
-    tracking_id: UA-173081175-1
+    tracking_id: G-ETK7QDC8Q6
     anonymize_ip: true
 
 algolia:

@@ -6,9 +6,6 @@ toc: false
 toc_label: "Navigation"
 ---
 
-This is a test.
-
-Let's just check if this one is correct.
 
 **Meeting Times**
 

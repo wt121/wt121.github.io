@@ -11,6 +11,6 @@ You can also submit blog posts anonymously through the google form if desired.
 
 ### Contact
 
-If there are any issues or if you have any questions/suggestions, feel free to email them to...
+If there are any issues or if you have any questions/suggestions, feel free to email them to wesleytsai0121@gmail.com
 
 

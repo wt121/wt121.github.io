@@ -13,4 +13,4 @@ The meeting time and the meeting's participants are included in a google doc/spr
 Instructions for submitting a blog post can be found under the "Submit a Blog Post" section.
 
 
-All of these steps won't be needed once I learn even more and eventually create a dynamic database for all of you users!
+Once I'll eventually create a dynamic database to smoothen this process.

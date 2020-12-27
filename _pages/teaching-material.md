@@ -5,10 +5,10 @@ author_profile: false
 toc: true
 toc_label: "Topics"
 ---
+Here is my first blog post of some of the tips that I have found helpful and I will continually add to them. 
+If you would like to submit your own blog post feel free to check out the "Submit a Blog Post" section for more details.
 
-Hi everyone, here are some of the tips that I have found helpful and I will continually add to them.
-
-1. So far is speaking through the nose by focusing sound
+1. I have found it helpful to speak through the nose by focusing sound
 production through there.
 
 2. Thinking to myself positively and creating confidence.

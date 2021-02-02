@@ -25,5 +25,10 @@ Delayed auditory feedback in reducing stuttering is when the stutterer wears hea
 After reading about its possible applications for stuttering, I decided to try Delayed Auditory Feedback. I downloaded a <a href="https://apps.apple.com/us/app/fonate-daf-control-stuttering/id981000993">free DAF app</a> on the app store. It's recommended that you use headhpones with it for the best effect.
 
 
-I began by testing it out with simple conversation between me and my mom. It felt odd listening to delayed, lower-pitched feeback of my voice, but my mind felt much clearer and I could speak without any difficulties.   
+I began by testing it out with simple conversation between me and my mom. It felt odd listening to delayed, lower-pitched feeback of my voice, but my mind felt much clearer and I could speak without any difficulties.
+
+
+Delayed auditory feedback helps the speaker speak slowly by disrupting the auditory feedback loop.
+
+<img src="https://www.researchgate.net/profile/Ella_Lattenkamp/publication/340809002/figure/fig1/AS:882697685700615@1587462936331/Schematic-of-an-auditory-feedback-loop-underlying-speech-acquisition-and-vocal-learning.ppm" alt="auditoryfeedbackloop">   
 

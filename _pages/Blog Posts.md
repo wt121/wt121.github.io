@@ -14,3 +14,6 @@ production through there.
 2. Thinking to myself positively and creating confidence.
 
 3. Take it slow and consciously avoid filler words and only think of the words you will speak in your head, without the filler words. 
+
+## New Method of Speech Therapy: Using Delayed Auditory Feedback
+

@@ -17,3 +17,5 @@ production through there.
 
 ## New Method of Speech Therapy: Using Delayed Auditory Feedback
 
+I recently tried Delayed Auditory Feedback. I downloaded a <a href="https://apps.apple.com/us/app/fonate-daf-control-stuttering/id981000993">free DAF app</a> on the app store. It's recommended that you use headhpones with it, as it   
+

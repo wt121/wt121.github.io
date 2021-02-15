@@ -4,9 +4,6 @@ author_profile: false
 title: "About"
 ---
 
-Hello! This is an about page.
-
-Let's test if this is the correct page.
 
 Hello and Welcome to my project! This website is a place where people who stutter can set up meetings with one others to practice their speech and share their stories through blog posts.
 

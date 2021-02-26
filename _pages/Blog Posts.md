@@ -32,3 +32,11 @@ Delayed auditory feedback helps the speaker speak slowly by disrupting the audit
 
 <img src="https://www.researchgate.net/profile/Ella_Lattenkamp/publication/340809002/figure/fig1/AS:882697685700615@1587462936331/Schematic-of-an-auditory-feedback-loop-underlying-speech-acquisition-and-vocal-learning.ppm" alt="auditoryfeedbackloop">   
 
+
+## The Importance of Eye Contact When Speaking
+
+When I speak with other people, my eyes tend to dart around, landing everywhere except their eyes. Instead of looking straight at their eyes, I'm analyzing their facial features or other surroundings.
+
+But by making eye contact, I noticed that my stuttering is reduced significantly. I am usually afraid of making eye contact because I am nervous about my stutter and what a stranger may think of it. But by making eye contact, I appear and even feel more confident, decreasing my anxiety.
+
+By making eye contact, the other person will sense your engagement, and conversations have rewardingly become a lot smoother for me.

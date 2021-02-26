@@ -13,4 +13,4 @@ The meeting time and the meeting's participants are included in a google doc/spr
 Instructions for submitting a blog post can be found under the "Submit a Blog Post" section.
 
 
-Once I'll eventually create a dynamic database to smoothen this process.
+Currently working on a video chat plug-in to enable video chat!
